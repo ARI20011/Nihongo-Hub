@@ -599,18 +599,139 @@ function verbDetail(c){
  const typeLabel=verbType(c)==='ichidan'?'一段動詞 · Ichidan':verbType(c)==='godan'?'五段動詞 · Godan':verbType(c)==='suru'?'する動詞 · Irregular': '不規則 · Irregular';
  return `<div class="dict-hero"><div><span class="dict-badge">${esc(c.level)} · ${esc(typeLabel)}</span><div class="dict-word jp">${esc(c.word)}</div><div class="dict-reading">${esc(c.reading)}</div><h3>${esc(c.meaning)}</h3><p>${esc(c.category)} · Bentuk dasar: <b>${esc(c.word)}</b></p></div><div class="dict-toolbar"><button id="dictSpeakWord">🔊 Dengarkan</button></div></div><div class="grammar-card"><h3>📐 Pola kalimat utama</h3><p><code>Topik は + objek を + kata kerja</code></p><div class="example-box"><b>Contoh:</b><br><span class="jp">私はご飯を${esc(v.polite)}。</span><br>Artinya: Saya ${esc(c.meaning)}.</div></div><div class="verb-table-wrap"><table class="verb-table"><thead><tr><th>Bentuk</th><th>Konjugasi</th><th>Kapan digunakan</th><th>Contoh pola</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td><span class="verb-form jp">${esc(r[1])}</span></td><td>${esc(r[2])}</td><td><span class="jp">${esc(r[3])}</span></td></tr>`).join('')}</tbody></table></div><div class="grammar-card"><h3>🧠 Catatan belajar</h3><p>Gunakan bentuk <b>ます/ました/ません</b> saat membutuhkan gaya sopan. Bentuk kamus, ない, た, dan て lebih umum dalam pola informal dan tata bahasa.</p><p><b>Catatan:</b> bentuk pasif, kausatif, dan kausatif-pasif memiliki nuansa makna yang bergantung konteks.</p></div>`;
 }
+function adjectiveType(c){
+  if(!c || c.category!=='Kata Sifat') return null;
+  const naWords=new Set(['簡単','便利','大切','特別','有名','暇','元気','静か','きれい','嫌い','好き','上手','下手','必要','大丈夫','安全','危険','親切','有名','新鮮','丈夫','丁寧','複雑','自由','便利','残念','熱心','真面目']);
+  return naWords.has(c.word)||naWords.has(c.reading)?'na':'i';
+}
+function adjectiveDetail(c){
+  const t=adjectiveType(c), w=c.word, r=c.reading;
+  if(t==='i'){
+    const irregular=w==='いい'||w==='良い';
+    const base=irregular?'よい':w;
+    const past=base.slice(0,-1)+'かった', neg=base.slice(0,-1)+'くない', negPast=base.slice(0,-1)+'くなかった', te=base.slice(0,-1)+'くて', adverb=base.slice(0,-1)+'く';
+    return `<div class="dict-hero"><div><span class="dict-badge">${esc(c.level)} · い-adjective</span><div class="dict-word jp">${esc(w)}</div><div class="dict-reading">${esc(r)}</div><h3>${esc(c.meaning)}</h3><p>い形容詞 · kata sifat yang berkonjugasi dengan mengubah akhiran <b>い</b>.</p></div><div class="dict-toolbar"><button id="dictSpeakAdj">🔊 Dengarkan</button></div></div>
+    <div class="grammar-card"><h3>🧠 Rumus い-adjective</h3><div class="formula-grid"><div><b>Positif</b><code>${esc(w)}です</code></div><div><b>Negatif</b><code>${esc(neg)}です</code></div><div><b>Lampau</b><code>${esc(past)}です</code></div><div><b>Lampau negatif</b><code>${esc(negPast)}です</code></div><div><b>Menyambung</b><code>${esc(te)}</code></div><div><b>Keterangan</b><code>${esc(adverb)}</code></div></div><p><b>Aturan:</b> hapus <b>い</b>, lalu tambahkan <b>くない</b> untuk negatif, <b>かった</b> untuk lampau, dan <b>くて</b> untuk menghubungkan.</p>${irregular?'<p class="warning-note">⚠️ いい adalah pengecualian: bentuk lampau yang benar <b>よかった</b>, bukan いかった.</p>':''}</div>
+    <div class="verb-table-wrap"><table class="verb-table"><thead><tr><th>Fungsi</th><th>Bentuk</th><th>Contoh</th><th>Arti</th></tr></thead><tbody>
+      <tr><td>Sekarang +</td><td class="jp">${esc(w)}です</td><td class="jp">この本は${esc(w)}です。</td><td>${esc(c.meaning)}</td></tr>
+      <tr><td>Sekarang −</td><td class="jp">${esc(neg)}です</td><td class="jp">この本は${esc(neg)}です。</td><td>tidak ${esc(c.meaning)}</td></tr>
+      <tr><td>Lampau +</td><td class="jp">${esc(past)}です</td><td class="jp">昨日は${esc(past)}です。</td><td>dulu/sudah ${esc(c.meaning)}</td></tr>
+      <tr><td>Lampau −</td><td class="jp">${esc(negPast)}です</td><td class="jp">昨日は${esc(negPast)}です。</td><td>dulu tidak ${esc(c.meaning)}</td></tr>
+      <tr><td>Menghubungkan</td><td class="jp">${esc(te)}</td><td class="jp">${esc(te)}、きれいです。</td><td>${esc(c.meaning)} dan ...</td></tr>
+      <tr><td>Sebelum kata benda</td><td class="jp">${esc(w)} + N</td><td class="jp">${esc(w)}家です。</td><td>rumah yang ${esc(c.meaning)}</td></tr>
+      <tr><td>Keterangan cara</td><td class="jp">${esc(adverb)} + V</td><td class="jp">${esc(adverb)}話します。</td><td>melakukan dengan keadaan ${esc(c.meaning)}</td></tr>
+    </tbody></table></div>
+    <div class="grammar-card"><h3>📌 Contoh natural</h3><p class="jp">この部屋は${esc(w)}です。</p><p>Artinya: Ruangan ini ${esc(c.meaning)}.</p><p class="jp">この部屋は${esc(te)}、明るいです。</p><p>Artinya: Ruangan ini ${esc(c.meaning)} dan terang.</p></div>`;
+  }
+  const past=w+'でした', neg=w+'ではありません', negPast=w+'ではありませんでした', conn=w+'で', noun=w+'な';
+  return `<div class="dict-hero"><div><span class="dict-badge">${esc(c.level)} · な-adjective</span><div class="dict-word jp">${esc(w)}</div><div class="dict-reading">${esc(r)}</div><h3>${esc(c.meaning)}</h3><p>な形容詞 · memakai <b>な</b> sebelum kata benda dan <b>で</b> saat menghubungkan.</p></div><div class="dict-toolbar"><button id="dictSpeakAdj">🔊 Dengarkan</button></div></div>
+  <div class="grammar-card"><h3>🧠 Rumus な-adjective</h3><div class="formula-grid"><div><b>Positif</b><code>${esc(w)}です</code></div><div><b>Negatif</b><code>${esc(neg)}です</code></div><div><b>Lampau</b><code>${esc(past)}</code></div><div><b>Lampau negatif</b><code>${esc(negPast)}</code></div><div><b>+ kata benda</b><code>${esc(noun)} + N</code></div><div><b>Menyambung</b><code>${esc(conn)}</code></div></div><p><b>Ingat:</b> <b>な</b> dipakai sebelum kata benda. Untuk menggabungkan dua sifat/kalimat, gunakan <b>で</b>.</p></div>
+  <div class="verb-table-wrap"><table class="verb-table"><thead><tr><th>Fungsi</th><th>Bentuk</th><th>Contoh</th><th>Arti</th></tr></thead><tbody>
+    <tr><td>Sekarang +</td><td class="jp">${esc(w)}です</td><td class="jp">この町は${esc(w)}です。</td><td>${esc(c.meaning)}</td></tr>
+    <tr><td>Sekarang −</td><td class="jp">${esc(neg)}です</td><td class="jp">この町は${esc(neg)}です。</td><td>tidak ${esc(c.meaning)}</td></tr>
+    <tr><td>Lampau +</td><td class="jp">${esc(past)}</td><td class="jp">昨日は${esc(past)}。</td><td>dulu/sudah ${esc(c.meaning)}</td></tr>
+    <tr><td>Lampau −</td><td class="jp">${esc(negPast)}</td><td class="jp">昨日は${esc(negPast)}。</td><td>dulu tidak ${esc(c.meaning)}</td></tr>
+    <tr><td>+ kata benda</td><td class="jp">${esc(noun)}</td><td class="jp">${esc(noun)}町</td><td>kota yang ${esc(c.meaning)}</td></tr>
+    <tr><td>Menyambung</td><td class="jp">${esc(conn)}</td><td class="jp">${esc(conn)}、便利です。</td><td>${esc(c.meaning)} dan praktis</td></tr>
+  </tbody></table></div>
+  <div class="grammar-card"><h3>📌 Contoh natural</h3><p class="jp">このホテルは${esc(w)}です。</p><p>Artinya: Hotel ini ${esc(c.meaning)}.</p><p class="jp">${esc(noun)}ホテルに泊まります。</p><p>Artinya: Saya menginap di hotel yang ${esc(c.meaning)}.</p><p class="jp">${esc(conn)}、便利です。</p><p>Artinya: ${esc(c.meaning)} dan praktis.</p></div>`;
+}
 function renderDictionary(){
- const q=($('#dictSearch')?.value||'').toLowerCase().trim(),lv=$('#dictLevel')?.value||'ALL',cat=$('#dictCategory')?.value||'Semua kategori';
- const arr=CARDS.filter(c=>(lv==='ALL'||c.level===lv)&&(cat==='Semua kategori'||c.category===cat)&&(!q||[c.word,c.reading,c.meaning,c.sentence].join(' ').toLowerCase().includes(q))).slice(0,80);
- $('#dictResults').innerHTML=arr.map(c=>`<article class="dict-item" data-dict="${esc(srsKey(c))}"><div class="jp">${esc(c.word)}</div><div class="reading">${esc(c.reading)}</div><b>${esc(c.meaning)}</b><small>${esc(c.level)} · ${esc(c.category)}${verbType(c)?' · Konjugasi lengkap':''}</small></article>`).join('')||"<div class='panel'>Tidak ditemukan.</div>";
- $$('#dictResults .dict-item').forEach(el=>el.onclick=()=>{const c=CARDS.find(x=>srsKey(x)===el.dataset.dict);if(!c)return;$('#dictDetail').classList.remove('hidden');if(verbType(c))$('#dictDetail').innerHTML=verbDetail(c);else $('#dictDetail').innerHTML=`<div class="dict-hero"><div><span class="dict-badge">${esc(c.level)} · ${esc(c.category)}</span><div class="dict-word jp">${esc(c.word)}</div><div class="dict-reading">${esc(c.reading)}</div><h3>${esc(c.meaning)}</h3></div></div><div class="grammar-card"><h3>Contoh kalimat</h3><p class="jp">${esc(c.sentence)}</p><p>${esc(c.translation)}</p><button class="btn primary" id="dictSpeak">🔊 Dengarkan</button></div>`;$('#dictSpeakWord')?.addEventListener('click',()=>speak(c.reading));$('#dictSpeak')?.addEventListener('click',()=>speak(c.reading));$('#dictDetail').scrollIntoView({behavior:'smooth',block:'start'});setModeStat('kanji')});
+ const q=($('#dictSearch')?.value||'').toLowerCase().trim(),lv=$('#dictLevel')?.value||'ALL',cat=$('#dictCategory')?.value||'Semua kategori',at=$('#dictAdjType')?.value||'ALL';
+ const adjSel=$('#dictAdjType'); if(adjSel) adjSel.classList.toggle('hidden',cat!=='Kata Sifat');
+ const arr=CARDS.filter(c=>(lv==='ALL'||c.level===lv)&&(cat==='Semua kategori'||c.category===cat)&&(!q||[c.word,c.reading,c.meaning,c.sentence].join(' ').toLowerCase().includes(q))&&(cat!=='Kata Sifat'||at==='ALL'||adjectiveType(c)===at)).slice(0,100);
+ $('#dictResults').innerHTML=arr.map(c=>`<article class="dict-item" data-dict="${esc(srsKey(c))}"><div class="jp">${esc(c.word)}</div><div class="reading">${esc(c.reading)}</div><b>${esc(c.meaning)}</b><small>${esc(c.level)} · ${esc(c.category)}${verbType(c)?' · Konjugasi lengkap':''}${adjectiveType(c)?' · '+(adjectiveType(c)==='i'?'い-adjective':'な-adjective'):''}</small></article>`).join('')||"<div class='panel'>Tidak ditemukan.</div>";
+ $$('#dictResults .dict-item').forEach(el=>el.onclick=()=>{const c=CARDS.find(x=>srsKey(x)===el.dataset.dict);if(!c)return;$('#dictDetail').classList.remove('hidden');if(verbType(c))$('#dictDetail').innerHTML=verbDetail(c);else if(adjectiveType(c))$('#dictDetail').innerHTML=adjectiveDetail(c);else $('#dictDetail').innerHTML=`<div class="dict-hero"><div><span class="dict-badge">${esc(c.level)} · ${esc(c.category)}</span><div class="dict-word jp">${esc(c.word)}</div><div class="dict-reading">${esc(c.reading)}</div><h3>${esc(c.meaning)}</h3></div></div><div class="grammar-card"><h3>Contoh kalimat</h3><p class="jp">${esc(c.sentence)}</p><p>${esc(c.translation)}</p><button class="btn primary" id="dictSpeak">🔊 Dengarkan</button></div>`;$('#dictSpeakWord')?.addEventListener('click',()=>speak(c.reading));$('#dictSpeakAdj')?.addEventListener('click',()=>speak(c.reading));$('#dictSpeak')?.addEventListener('click',()=>speak(c.reading));$('#dictDetail').scrollIntoView({behavior:'smooth',block:'start'});setModeStat('kanji')});
 }
 $('#reviewLevel')?.addEventListener('change',buildReview);
 $('#reviewAgain')?.addEventListener('click',()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate('again')});
 $('#reviewHard')?.addEventListener('click',()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate('hard')});
 $('#reviewGood')?.addEventListener('click',()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate('good')});
 $('#reviewEasy')?.addEventListener('click',()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate('easy')});
-$('#dictSearch')?.addEventListener('input',renderDictionary);$('#dictLevel')?.addEventListener('change',renderDictionary);$('#dictCategory')?.addEventListener('change',renderDictionary);
+$('#dictSearch')?.addEventListener('input',renderDictionary);$('#dictLevel')?.addEventListener('change',renderDictionary);$('#dictCategory')?.addEventListener('change',renderDictionary);$('#dictAdjType')?.addEventListener('change',renderDictionary);
+
+
+const MATERIALS={
+ huruf:{title:'🔤 Memahami Huruf Jepang',intro:'Fondasi paling utama. Kuasai bentuk, bunyi, dan fungsi kana sebelum mengejar kanji.',items:[
+  {l:'N5',t:'Hiragana ひらがな',d:'Dipakai terutama untuk kata asli Jepang, partikel, dan akhiran tata bahasa.',body:'Mulai dari あいうえお, lalu kembangkan ke K, S, T, N, H, M, Y, R, W. Pelajari dakuten が/ざ/だ/ば, handakuten ぱ, dan kombinasi ゃゅょ seperti きょう.'},
+  {l:'N5',t:'Katakana カタカナ',d:'Dipakai terutama untuk kata serapan, nama asing, onomatope tertentu, dan penekanan.',body:'Contoh: テレビ (televisi), コンピューター (komputer), コーヒー (kopi). Saat mode tulis diubah ke Katakana, target kata serapan harus dibaca sebagai kata Jepang yang sesuai.'},
+  {l:'N5',t:'Dakuten・Handakuten',d:'Tanda ゛ dan ゜ mengubah bunyi kana.',body:'か→が, さ→ざ, た→だ, は→ば/ぱ. Jangan hanya menghafal bentuk; dengarkan perbedaan bunyinya.'},
+  {l:'N5',t:'Kombinasi kecil ゃゅょ・っ',d:'Digunakan untuk bunyi gabungan dan konsonan rangkap.',body:'きゃ= kya, しゅ= shu, ちょ= cho. っ menandai konsonan rangkap: がっこう (gakkou).'},
+  {l:'N5',t:'Kanji dasar',d:'Mulai dari angka, hari, waktu, orang, tempat, dan kata kerja umum.',body:'Prioritas: 一 二 三 四 五 六 七 八 九 十, 日 月 火 水 木 金 土, 人 学 校 生 先, 時 分 半, 上 下 中 外 前 後.'},
+  {l:'N4',t:'Cara membaca kanji dalam kata',d:'Satu kanji bisa punya kun-yomi dan on-yomi.',body:'Jangan menghafal satu kanji hanya dengan satu bacaan. Hafalkan bersama kosakata: 食べる（たべる）, 食事（しょくじ）, 日本（にほん）.'}
+ ]},
+ partikel:{title:'🧩 Partikel N5–N4',intro:'Kenali fungsi partikel dari hubungan kata dalam kalimat, bukan dari terjemahan satu kata.',items:[
+  {l:'N5',t:'は — topik',d:'Menandai topik yang sedang dibicarakan.',body:'私は学生です。= Saya adalah siswa. Ingat: は ditulis ha tetapi dibaca wa sebagai partikel.'},
+  {l:'N5',t:'が — subjek/fokus',d:'Menunjukkan subjek atau memberi fokus pada informasi baru.',body:'誰が来ますか。田中さんが来ます。= Siapa yang datang? Tanaka yang datang.'},
+  {l:'N5',t:'を — objek',d:'Menandai benda yang dikenai tindakan.',body:'水を飲みます。= Minum air.'},
+  {l:'N5',t:'に — waktu/tujuan/penerima/lokasi keberadaan',d:'Sangat sering muncul dalam soal.',body:'七時に起きます。学校に行きます。先生に聞きます。机の上に本があります。'},
+  {l:'N5',t:'で — tempat aksi/alat',d:'Menunjukkan tempat berlangsungnya aksi atau alat/cara.',body:'学校で勉強します。バスで行きます。'},
+  {l:'N5',t:'へ — arah',d:'Menunjukkan arah tujuan.',body:'日本へ行きます。へ dibaca e.'},
+  {l:'N5',t:'と — bersama/kutipan',d:'Bisa berarti bersama dengan atau mengutip.',body:'友達と話します。先生は「勉強してください」と言いました。'},
+  {l:'N5',t:'も — juga',d:'Menggantikan penanda yang sesuai untuk menyatakan kesamaan.',body:'私も学生です。= Saya juga siswa.'},
+  {l:'N4',t:'から・まで',d:'Dari/sejak dan sampai/batas.',body:'九時から五時まで働きます。= Bekerja dari jam 9 sampai jam 5.'},
+  {l:'N4',t:'より・ほど・しか',d:'Pola perbandingan dan pembatasan.',body:'AはBより大きいです。日本語ほど難しくない。100円しかありません。'}
+ ]},
+ pola:{title:'📐 Pola Kalimat N5–N4',intro:'Baca pola sebagai kerangka. Cari kata sebelum/sesudah partikel dan bentuk kata kerja yang diminta.',items:[
+  {l:'N5',t:'NはNです',d:'Pernyataan identitas/kategori.',body:'私は学生です。= Saya siswa.'},
+  {l:'NはAです',d:'Menjelaskan sifat.',body:'この本は面白いです。= Buku ini menarik.'},
+  {l:'NをVます',d:'Objek + tindakan.',body:'本を読みます。= Membaca buku.'},
+  {l:'Nに行きます',d:'Pergi untuk tujuan.',body:'学校に行きます。= Pergi ke sekolah.'},
+  {l:'Vてください',d:'Permintaan sopan.',body:'名前を書いてください。= Tolong tulis nama.'},
+  {l:'Vています',d:'Sedang berlangsung/keadaan.',body:'今、勉強しています。= Sekarang sedang belajar.'},
+  {l:'Vたいです',d:'Keinginan pembicara.',body:'日本へ行きたいです。= Saya ingin pergi ke Jepang.'},
+  {l:'Vたことがあります',d:'Pernah punya pengalaman.',body:'日本へ行ったことがあります。= Pernah pergi ke Jepang.'},
+  {l:'Vたり、Vたりします',d:'Menyebut beberapa contoh aktivitas.',body:'本を読んだり、音楽を聞いたりします。'},
+  {l:'Vなければなりません',d:'Harus melakukan.',body:'勉強しなければなりません。= Harus belajar.'},
+  {l:'Vなくてもいいです',d:'Tidak perlu melakukan.',body:'明日は来なくてもいいです。= Besok tidak perlu datang.'},
+  {l:'～と思います',d:'Menyatakan pendapat/perkiraan.',body:'明日は雨だと思います。= Saya pikir besok hujan.'},
+  {l:'～たら',d:'Jika/ketika/setelah.',body:'家に帰ったら、電話します。= Setelah pulang, saya akan menelepon.'},
+  {l:'～なら',d:'Kalau memang mengenai topik itu / jika...',body:'日本へ行くなら、京都がおすすめです。= Kalau pergi ke Jepang, Kyoto direkomendasikan.'}
+ ]},
+ jlpt:{title:'🇯🇵 Cara Memahami Soal JLPT N5–N4',intro:'Strategi mengerjakan berdasarkan kata kunci, bentuk kalimat, dan konteks.',items:[
+  {l:'N5',t:'Kosakata',d:'Cari arti kata dari konteks, bukan menerjemahkan semua kata.',body:'Tandai kata waktu, angka, lokasi, dan kata kerja. Pada pilihan yang mirip, perhatikan partikel dan pasangan kata yang natural.'},
+  {l:'N5',t:'Tata bahasa',d:'Identifikasi bentuk yang diminta.',body:'Cari petunjuk seperti てください, ません, ました, たい, から, まで. Periksa apakah sebelum pola harus N, な-adjective, atau bentuk V tertentu.'},
+  {l:'N5',t:'Membaca',d:'Baca pertanyaan dulu lalu cari bagian teks yang relevan.',body:'Jangan langsung menerjemahkan seluruh teks. Temukan siapa, kapan, di mana, apa yang dilakukan, dan alasan.'},
+  {l:'N5',t:'Mendengarkan',d:'Dengarkan kata kunci sebelum informasi berubah.',body:'Catat angka, waktu, tempat, pilihan, dan kata perubahan seperti でも, じゃあ, それから.'},
+  {l:'N4',t:'Parafrasa',d:'Jawaban benar sering memakai kata berbeda tetapi makna sama.',body:'Bandingkan hubungan sebab-akibat, urutan waktu, siapa melakukan apa, dan tingkat kepastian.'},
+  {l:'N4',t:'Manajemen waktu',d:'Jangan habiskan waktu terlalu lama pada satu soal.',body:'Lewati soal yang buntu, tandai secara mental, lalu kembali jika waktu tersedia. Utamakan soal yang bisa dipastikan dari pola.'}
+ ]},
+ tka:{title:'📝 Memahami Soal TKA Bahasa Jepang',intro:'Panduan membaca stimulus, tabel, dialog, dan pernyataan. Ini materi strategi belajar, bukan klaim format resmi.',items:[
+  {l:'N5',t:'Soal tabel',d:'Baca judul kolom/baris sebelum angka.',body:'Cari unit, tanggal, waktu, jumlah, dan label. Bandingkan hanya data yang ditanyakan agar tidak tertukar.'},
+  {l:'N5',t:'Soal benar/salah',d:'Cocokkan setiap pernyataan dengan stimulus.',body:'Jangan menilai berdasarkan pengetahuan umum. Gunakan bukti dari teks/tabel. Kata seperti いつも, ぜんぜん, だけ, しか dapat mengubah makna.'},
+  {l:'N5',t:'Soal dialog',d:'Perhatikan siapa berbicara kepada siapa.',body:'Lihat tujuan, hubungan pembicara, waktu, tempat, dan respons. Bentuk sopan dapat menjadi petunjuk situasi.'},
+  {l:'N4',t:'Soal bacaan',d:'Cari ide utama dan detail pendukung.',body:'Bedakan fakta, alasan, contoh, dan kesimpulan. Kata しかし, だから, それで, 例えば sering membantu menemukan hubungan antarbagian.'},
+  {l:'N4',t:'Soal gabungan',d:'Gabungkan teks + tabel + pilihan.',body:'Kerjakan bagian yang datanya paling jelas dahulu. Setelah itu gunakan hubungan antar sumber untuk menentukan jawaban.'},
+  {l:'N4',t:'Kesalahan umum',d:'Jangan memilih jawaban hanya karena ada kata yang sama.',body:'Soal dapat memakai sinonim/parafrasa. Cocokkan makna seluruh kalimat, bukan satu kata.'}
+ ]},
+ ssw:{title:'🧑‍🔧 Pemahaman SSW',intro:'Materi bahasa Jepang yang relevan untuk belajar dan memahami konteks kerja. Bidang di bawah dapat dikembangkan menjadi modul khusus.',items:[
+  {l:'ALL',t:'介護 · Kaigo / Caregiving',d:'Kosakata perawatan dan komunikasi dengan pengguna layanan.',body:'Fokus: tubuh, kesehatan dasar, bantuan aktivitas, keselamatan, instruksi sopan, waktu, dan laporan sederhana.'},
+  {l:'ALL',t:'ビルクリーニング · Cleaning',d:'Bahasa kerja untuk kebersihan gedung.',body:'Fokus: alat kebersihan, permukaan, area, prosedur, larangan, keselamatan, dan instruksi kerja.'},
+  {l:'ALL',t:'工業製品製造 · Manufacturing',d:'Kosakata proses produksi dan keselamatan kerja.',body:'Fokus: mesin, komponen, ukuran, pemeriksaan, kualitas, urutan kerja, dan tanda peringatan.'},
+  {l:'ALL',t:'建設 · Construction',d:'Bahasa kerja di lokasi konstruksi.',body:'Fokus: alat, bahan, posisi, arah, prosedur, keselamatan, dan komunikasi singkat.'},
+  {l:'ALL',t:'造船・舶用工業 · Shipbuilding',d:'Kosakata kerja kapal dan prosedur keselamatan.',body:'Fokus: bagian kapal, alat, ukuran, posisi, proses, dan instruksi.'},
+  {l:'ALL',t:'自動車整備 · Auto Maintenance',d:'Bahasa untuk pemeriksaan dan perawatan kendaraan.',body:'Fokus: komponen, kondisi kendaraan, alat, pemeriksaan, kerusakan, dan instruksi.'},
+  {l:'ALL',t:'航空 · Aviation',d:'Bahasa kerja dasar di lingkungan penerbangan.',body:'Fokus: keselamatan, peralatan, area kerja, prosedur, waktu, dan komunikasi.'},
+  {l:'ALL',t:'宿泊 · Accommodation',d:'Bahasa layanan hotel/penginapan.',body:'Fokus: check-in/out, fasilitas, reservasi, permintaan tamu, kebersihan, dan pelayanan sopan.'},
+  {l:'ALL',t:'農業 · Agriculture',d:'Bahasa kerja pertanian.',body:'Fokus: tanaman, cuaca, alat, panen, kualitas, jumlah, dan keselamatan kerja.'},
+  {l:'ALL',t:'漁業 · Fisheries',d:'Bahasa kerja perikanan.',body:'Fokus: alat, hasil tangkapan, cuaca, laut, proses kerja, jumlah, dan keselamatan.'},
+  {l:'ALL',t:'飲食料品製造 · Food Manufacturing',d:'Bahasa produksi makanan/minuman.',body:'Fokus: bahan, proses, kebersihan, suhu, kualitas, kemasan, tanggal, dan keselamatan.'},
+  {l:'ALL',t:'外食業 · Food Service',d:'Bahasa kerja restoran.',body:'Fokus: menu, pesanan, dapur, alergi, kebersihan, pelayanan, pembayaran, dan instruksi.'},
+  {l:'ALL',t:'林業 · Forestry',d:'Bahasa kerja kehutanan.',body:'Fokus: alat, pohon, area kerja, cuaca, prosedur, dan keselamatan.'},
+  {l:'ALL',t:'木材産業 · Wood Industry',d:'Bahasa kerja pengolahan kayu.',body:'Fokus: bahan, mesin, ukuran, pemotongan, pemeriksaan, kualitas, dan keselamatan.'},
+  {l:'ALL',t:'自動車運送業 · Road Transportation',d:'Bahasa kerja transportasi jalan.',body:'Fokus: kendaraan, rute, muatan, waktu, dokumen, pemeriksaan, dan keselamatan.'},
+  {l:'ALL',t:'鉄道 · Railway',d:'Bahasa kerja perkeretaapian.',body:'Fokus: stasiun, jadwal, keselamatan, penumpang, peralatan, dan prosedur.'}
+ ]}
+};
+function renderMaterials(){
+ const tab=document.querySelector('#materialTabs .active')?.dataset.mtab||'huruf', level=document.querySelector('.material-levels .active')?.dataset.mlevel||'ALL', q=($('#materialSearch')?.value||'').toLowerCase().trim(), data=MATERIALS[tab]||MATERIALS.huruf;
+ const items=data.items.filter(x=>(level==='ALL'||x.l==='ALL'||x.l===level)&&(!q||[x.t,x.d,x.body,x.l].join(' ').toLowerCase().includes(q)));
+ $('#materialContent').innerHTML=`<div class="material-intro panel"><span class="eyebrow">${esc(data.title)}</span><h2>${esc(data.title)}</h2><p>${esc(data.intro)}</p></div><div class="material-grid">${items.map((x,i)=>`<article class="material-card" data-mi="${i}"><span class="material-level">${esc(x.l)}</span><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p><button class="btn">Pelajari →</button></article>`).join('')}</div>${items.length?'':'<div class="panel empty-state">Materi tidak ditemukan. Coba hapus kata pencarian atau pilih Semua.</div>'}`;
+ $$('#materialContent .material-card').forEach((el,i)=>el.onclick=()=>{const x=items[i];$('#materialDetail').classList.remove('hidden');$('#materialDetail').innerHTML=`<div class="material-detail-head"><span class="material-level">${esc(x.l)}</span><h2>${esc(x.t)}</h2><p>${esc(x.d)}</p></div><div class="material-body"><h3>📘 Penjelasan</h3><p>${esc(x.body)}</p><div class="material-study-tip"><b>💡 Cara belajar:</b> baca contoh, ucapkan keras-keras, lalu buat satu kalimat sendiri menggunakan pola tersebut.</div></div>`;$('#materialDetail').scrollIntoView({behavior:'smooth',block:'start'})});
+}
+$$('#materialTabs button').forEach(b=>b.addEventListener('click',()=>{$$('#materialTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderMaterials()}));
+$$('.material-levels button').forEach(b=>b.addEventListener('click',()=>{$$('.material-levels button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderMaterials()}));
+$('#materialSearch')?.addEventListener('input',renderMaterials);renderMaterials();
 
 function enhanceStrokeTrainer(){
   if(!$("#strokeOrderInfo"))return;

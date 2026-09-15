@@ -31,6 +31,7 @@
 <a href="#review" data-page="review">🧠 Review Pintar</a>
       </div>
     </div>
+    <a href="#materi" data-page="materi">📚 Materi</a>
     <a href="#contact" data-page="contact">Contact</a>
     <a href="#test" data-page="test">Test</a>
   </nav>
@@ -136,7 +137,7 @@
 
 <section id="dictionary" class="page">
   <div class="section-head"><div><span class="eyebrow">KAMUS LENGKAP</span><h2>📖 Kamus & Konjugasi Kata Kerja</h2><p>Pilih kata kerja untuk melihat bentuk informal, formal, negatif, lampau, て形, sedang berlangsung, keinginan, kemungkinan, pasif, kausatif, dan pola kalimat.</p></div></div>
-  <div class="dictionary-search"><input id="dictSearch" placeholder="Cari: 食べる / taberu / makan..."><select id="dictLevel"><option>ALL</option><option>N5</option><option>N4</option></select><select id="dictCategory"><option>Semua kategori</option><option>Kata Kerja</option><option>Kata Benda</option><option>Kata Sifat</option></select></div>
+  <div class="dictionary-search"><input id="dictSearch" placeholder="Cari: 食べる / taberu / makan..."><select id="dictLevel"><option>ALL</option><option>N5</option><option>N4</option></select><select id="dictCategory"><option>Semua kategori</option><option>Kata Kerja</option><option>Kata Benda</option><option>Kata Sifat</option></select><select id="dictAdjType" class="hidden"><option value="ALL">Semua sifat</option><option value="i">い-adjective</option><option value="na">な-adjective</option></select></div>
   <div id="dictResults" class="dict-grid"></div>
   <div id="dictDetail" class="panel dict-detail hidden"></div>
 </section>
@@ -163,6 +164,21 @@
     <div class="panel stats-card"><h3>Hafalan</h3><div class="level-stats"><div><b>N5</b><span><strong id="n5Words">0</strong> Kotoba</span><span><strong id="n5Kanji">0</strong> Kanji</span><span><strong id="n5Sent">0</strong> Kalimat</span></div><div><b>N4</b><span><strong id="n4Words">0</strong> Kotoba</span><span><strong id="n4Kanji">0</strong> Kanji</span><span><strong id="n4Sent">0</strong> Kalimat</span></div></div><div class="stat-big"><span>Total akurasi</span><b id="profileAccuracy">0%</b></div></div>
   </div>
   <div class="panel activity"><h3>Statistik belajar</h3><div class="stat-bars"><div><span>Flashcard</span><b id="statFlash">0</b></div><div><span>Mode Tulis</span><b id="statType">0</b></div><div><span>Gores Kanji</span><b id="statStroke">0</b></div><div><span>Mendengarkan</span><b id="statListen">0</b></div><div><span>Mode Tebak</span><b id="statQuiz">0</b></div><div><span>Percakapan</span><b id="statConv">0</b></div><div><span>Mode Bicara</span><b id="statSpeak">0</b></div><div><span>Lihat Kanji</span><b id="statKanji">0</b></div></div></div>
+</section>
+
+<section id="materi" class="page">
+  <div class="section-head"><div><span class="eyebrow">LEARNING CENTER</span><h2>📚 Materi Bahasa Jepang</h2><p>Pusat materi untuk memahami huruf, partikel, pola kalimat, JLPT N5–N4, TKA Jepang, dan persiapan SSW.</p></div></div>
+  <div class="material-tabs" id="materialTabs">
+    <button class="active" data-mtab="huruf">🔤 Huruf Utama</button>
+    <button data-mtab="partikel">🧩 Partikel</button>
+    <button data-mtab="pola">📐 Pola Kalimat</button>
+    <button data-mtab="jlpt">🇯🇵 JLPT N5–N4</button>
+    <button data-mtab="tka">📝 Memahami TKA</button>
+    <button data-mtab="ssw">🧑‍🔧 SSW</button>
+  </div>
+  <div class="material-toolbar panel"><div><b>Level belajar</b><div class="material-levels"><button class="active" data-mlevel="ALL">Semua</button><button data-mlevel="N5">N5</button><button data-mlevel="N4">N4</button></div></div><input id="materialSearch" placeholder="Cari materi, partikel, pola, atau bidang SSW..."></div>
+  <div id="materialContent" class="material-content"></div>
+  <div id="materialDetail" class="panel material-detail hidden"></div>
 </section>
 
 <section id="contact" class="page">

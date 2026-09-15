@@ -1,28 +1,12 @@
-# Nihongo Hub N5/N4 v7
+# Nihongo Hub N5/N4 — v8.7
 
-## Upgrade besar
-1. Smart Review / SRS
-2. Dashboard + statistik harian
-3. Test JLPT N5/N4 + TKA 3 dokumen
-4. Speaking Tutor 5 menit berbasis Speech Recognition browser
-5. Kamus Jepang
-6. Achievement + streak
-7. Kanji stroke-order trainer dengan info Kun-yomi/On-yomi/level
+Versi polishing dengan:
+- Kamus kata kerja dan konjugasi.
+- Filter kata sifat い-adjective / な-adjective.
+- Penjelasan bentuk positif, negatif, lampau, sambungan くて / で, dan contoh.
+- Halaman Materi baru di navbar.
+- Materi Huruf Jepang, Partikel, Pola Kalimat, strategi JLPT N5/N4, strategi memahami TKA, dan SSW per bidang.
+- Search + filter level N5/N4/semua pada Materi.
+- Kartu materi yang bisa ditekan untuk membuka penjelasan lengkap.
 
-### SRS
-- Lagi: ulang sekitar 30 menit
-- Sulit: ulang sekitar 1 hari
-- Bisa: naik box dan ulang beberapa hari
-- Mudah: jeda lebih panjang
-- Data tersimpan di LocalStorage
-
-### Speaking
-Mode bicara memakai Web Speech API jika browser mendukung. Ini tutor lokal berbasis respons kontekstual, bukan LLM cloud; untuk AI generatif sungguhan perlu backend/API.
-
-### TKA
-Bank TKA tetap menggunakan 30 soal v6 yang disusun ulang/parafrase berdasarkan 3 dokumen latihan pengguna:
-- A1 fokus Dokkai
-- A1 N5 20 soal
-- A1 PGK
-
-Bukan salinan dokumen mentah.
+Semua fitur berjalan sebagai static HTML/CSS/JavaScript dan menggunakan localStorage untuk data belajar.
