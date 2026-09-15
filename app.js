@@ -271,7 +271,7 @@ $("#editProfile").onclick=()=>{
    yang diunggah pengguna: A1 Dokkai, A1 N5 20 soal, dan A1 PGK.
 */
 
-const TESTS = {
+const SOURCE_TKA={
   "JLPT-N5":[
     {q:"「水」 dibaca…",o:["みず","みせ","みち","みみ"],a:0},
     {q:"「学校」 artinya…",o:["rumah sakit","sekolah","stasiun","kantor"],a:1},
@@ -329,65 +329,127 @@ const TESTS = {
     {type:"pgk",q:"Surat menceritakan Ali pergi ke Yogyakarta bersama keluarga, melihat Borobudur, merasa senang, dan ingin pergi lagi.",statements:[["アリさんは ひとりで ジョグジャカルタへ 行きました。",false],["アリさんは 旅行を たのしみました。",true],["アリさんは また ジョグジャカルタへ 行きたいです。",true]],skill:"Pemahaman Inferensial"}
   ]
 };
-let testMode="JLPT-N5",testActive=false,testSeconds=1200,testTimerId=null,testAnswers={};
-function getTestQuestions(){return TESTS[testMode]||TESTS["JLPT-N5"]}
-function testLabel(){return testMode==="TKA"?"TKA Bahasa Jepang":testMode.replace("JLPT-","JLPT ")}
-function renderTestSetup(){
- const a=getTestQuestions();
- if($("#testTitle"))$("#testTitle").textContent=testLabel();
- if($("#testDescription"))$("#testDescription").textContent=testMode==="TKA"?"Bank latihan TKA Jepang dari materi tiga dokumen latihan yang kamu berikan, dengan pilihan ganda dan PGK.":`Latihan ${testLabel()} untuk kosakata, kanji, partikel, tata bahasa, dan pemahaman.`;
- if($("#testCount"))$("#testCount").textContent=a.length;
- $("#testSetup")?.classList.remove("hidden");$("#testRunning")?.classList.add("hidden");$("#testResult")?.classList.add("hidden");
+
+/* ===== v8.5 Exam Center: 90-minute, 4-section tests ===== */
+const V8_BANK={
+N5:{
+  "Kosakata":[
+    ['「水」 dibaca…',['みず','みせ','みち','みみ'],0,'水（みず） berarti air.'],['「学校」 artinya…',['rumah sakit','sekolah','stasiun','kantor'],1,'学校（がっこう） berarti sekolah.'],['「昨日」 artinya…',['hari ini','besok','kemarin','minggu depan'],2,'昨日（きのう） berarti kemarin.'],['「午前」 berarti…',['AM/sebelum siang','PM','tengah malam','minggu depan'],0,'午前（ごぜん） berarti AM atau sebelum siang.'],['「先生」 berarti…',['murid','guru','dokter','teman'],1,'先生（せんせい） berarti guru.'],['「駅」 berarti…',['stasiun','taman','rumah','sekolah'],0,'駅（えき） berarti stasiun.'],['「大きい」 lawannya…',['あたらしい','ちいさい','たかい','おもしろい'],1,'大きい（おおきい） = besar, lawannya 小さい（ちいさい） = kecil.'],['「安い」 berarti…',['mahal','murah','jauh','sibuk'],1,'安い（やすい） berarti murah.'],['「来週」 berarti…',['minggu ini','minggu lalu','minggu depan','bulan depan'],2,'来週（らいしゅう） berarti minggu depan.'],['「家族」 berarti…',['keluarga','kelas','perusahaan','tetangga'],0,'家族（かぞく） berarti keluarga.'],['「食べる」 berarti…',['minum','makan','tidur','membeli'],1,'食べる（たべる） berarti makan.'],['「飲む」 berarti…',['membaca','minum','menulis','berjalan'],1,'飲む（のむ） berarti minum.'],['「新しい」 berarti…',['lama','baru','tinggi','cepat'],1,'新しい（あたらしい） berarti baru.'],['「天気」 berarti…',['cuaca','waktu','uang','kamar'],0,'天気（てんき） berarti cuaca.'],['「毎日」 berarti…',['setiap hari','setiap minggu','kemarin','malam ini'],0,'毎日（まいにち） berarti setiap hari.'],['「名前」 berarti…',['nama','umur','alamat','nomor'],0,'名前（なまえ） berarti nama.'],['「友達」 berarti…',['saudara','teman','guru','tetangga'],1,'友達（ともだち） berarti teman.'],['「時間」 berarti…',['jam/waktu','uang','cuaca','jalan'],0,'時間（じかん） berarti waktu/durasi.'],['「右」 berarti…',['kiri','kanan','atas','bawah'],1,'右（みぎ） berarti kanan.'],['「左」 berarti…',['kiri','kanan','depan','belakang'],0,'左（ひだり） berarti kiri.']
+  ],
+  "Tata Bahasa":[
+    ['わたしは 毎日 七時___ 起きます。',['に','を','で','が'],0,'に dipakai untuk waktu tertentu: 七時に.'],['学校___ 日本語を 勉強します。',['で','に','を','へ'],0,'で menunjukkan tempat berlangsungnya aktivitas.'],['水___ 飲みます。',['が','を','で','に'],1,'を menandai objek langsung: 水を飲みます.'],['毎朝 パン___ 食べます。',['を','に','で','へ'],0,'パン adalah objek yang dimakan, jadi memakai を.'],['田中さん___ 学生です。',['は','を','で','に'],0,'は menandai topik: 田中さんは.'],['七時___ 八時まで 勉強します。',['から','で','を','へ'],0,'から berarti mulai dari; pola から～まで.'],['これは だれ___ 本ですか。',['の','を','に','で'],0,'の menghubungkan kepemilikan: だれの本.'],['日曜日___ 休みます。',['に','を','が','で'],0,'Hari/tanggal tertentu memakai に.'],['バス___ 学校へ 行きます。',['で','を','に','が'],0,'で menunjukkan alat/transportasi.'],['りんごが 三つ___ あります。',['が','を','に','で'],0,'Pola keberadaan: りんごが三つあります.'],['ここ___ 本を 読みます。',['で','に','を','が'],0,'Aktivitas membaca dilakukan di tempat: で.'],['日本語___ わかります。',['が','を','で','へ'],0,'わかります lazim memakai が untuk hal yang dipahami.'],['コーヒー___ 飲みません。',['を','に','で','が'],0,'Objek minum memakai を.'],['「いっしょに 行きませんか。」 respons yang cocok…',['はい、行きましょう。','いいえ、行きました。','はい、行きません。','行きましたか。'],0,'～ませんか adalah ajakan; respons positif: 行きましょう.'],['きのう 本を___。',['読みました','読みます','読むです','読んでいます'],0,'きのう menunjukkan lampau, jadi 読みました.'],['これは わたし___ かばんです。',['の','を','へ','で'],0,'の menyatakan kepunyaan: tas saya.'],['教室に 先生___ います。',['が','を','で','へ'],0,'Orang yang berada di suatu tempat ditandai が.'],['机の 上___ 本が あります。',['に','を','で','へ'],0,'に menunjukkan lokasi keberadaan benda.'],['毎日 日本語を___。',['勉強します','勉強でした','勉強するです','勉強しませんでした'],0,'毎日 menunjukkan kebiasaan; bentuk sopan non-lampau: 勉強します.'],['「何時ですか。」 「___ 八時です。」',['ちょうど','まで','しか','から'],0,'ちょうど berarti tepat/pas.']
+  ],
+  "Membaca":[
+    ['Teks: 「まいにち 7じに おきます。それから あさごはんを たべます。8じに がっこうへ いきます。」 Kapan pergi ke sekolah?',['6じ','7じ','8じ','9じ'],2,'Teks menyebut 8じに がっこうへ いきます.'],['Teks: 「きょうは にちようびです。デパートへ いきません。うちで ほんを よみます。」 Apa yang dilakukan di rumah?',['menonton film','membaca buku','belajar di sekolah','memasak'],1,'Kalimat ほんを よみます berarti membaca buku.'],['Teks: 「田中さんは 会社員です。月曜日から 金曜日まで はたらきます。」 Kapan bekerja?',['Senin–Jumat','Sabtu saja','Minggu saja','setiap malam'],0,'月曜日から金曜日まで berarti Senin sampai Jumat.'],['Teks: 「駅は ここから みぎです。銀行の となりです。」 Lokasi stasiun?',['di kiri bank','di sebelah bank','di belakang rumah','di dalam sekolah'],1,'銀行のとなり berarti di sebelah bank.'],['Teks: 「あした 友達と 公園へ いきます。おにぎりを たべます。」 Dengan siapa pergi?',['guru','keluarga','teman','sendiri'],2,'友達と berarti bersama teman.'],['Teks: 「きのうは 雨でした。どこへも いきませんでした。」 Mengapa tidak pergi?',['karena hujan','karena sakit','karena ujian','karena bekerja'],0,'Stimulus menyebut kemarin hujan dan tidak pergi ke mana pun.'],['Teks: 「わたしの へやに つくえと ベッドが あります。パソコンは つくえの うえです。」 Komputer berada…',['di bawah meja','di atas meja','di tempat tidur','di luar kamar'],1,'つくえのうえ berarti di atas meja.'],['Teks: 「母は 先生です。父は 会社員です。」 Pekerjaan ibu?',['dokter','guru','pegawai bank','murid'],1,'先生 berarti guru.'],['Teks: 「土曜日は 10じに おきます。朝ごはんを たべてから スーパーへ いきます。」 Setelah sarapan ia…',['tidur','ke supermarket','ke sekolah','bekerja'],1,'たべてから berarti setelah makan/sarapan.'],['Teks: 「この かばんは 5000円です。あの かばんは 3000円です。」 Tas mana lebih murah?',['yang ini','yang itu','keduanya sama','tidak diketahui'],1,'3000円 lebih murah daripada 5000円.'],['Teks: 「図書館は 9じから 5じまでです。」 Jam buka perpustakaan?',['7–9','9–5','10–6','8–4'],1,'Dari 9 sampai 5.'],['Teks: 「わたしは 毎晩 11じに ねます。日曜日だけ 12じに ねます。」 Kapan tidur pukul 12?',['Senin','Sabtu','Minggu','setiap hari'],2,'日曜日だけ berarti hanya hari Minggu.'],['Teks: 「スーパーで 牛乳と パンを かいました。りんごは かいませんでした。」 Apa yang tidak dibeli?',['susu','roti','apel','semuanya'],2,'りんごは かいませんでした = tidak membeli apel.'],['Teks: 「山田さんは 日本語を 勉強しています。英語も 少し わかります。」 Bahasa apa yang sedang dipelajari?',['Inggris','Jepang','Korea','Indonesia'],1,'日本語を勉強しています.'],['Teks: 「駅まで バスで 20分です。歩くと 40分です。」 Dengan bus berapa menit?',['10','20','30','40'],1,'Bus membutuhkan 20 menit.'],['Teks: 「今日は さむいです。コートを きます。」 Mengapa memakai mantel?',['karena panas','karena dingin','karena hujan','karena sakit'],1,'さむい berarti dingin.'],['Teks: 「姉は 毎朝 コーヒーを 飲みます。わたしは お茶を 飲みます。」 Apa yang diminum pembicara?',['kopi','teh','air','susu'],1,'お茶 berarti teh.'],['Teks: 「日曜日に 京都へ 行きました。お寺を 見ました。」 Ke mana pergi?',['Tokyo','Kyoto','Osaka','Nara'],1,'京都（きょうと） disebut langsung.'],['Teks: 「8じに うちを でて、8じ半に 学校へ つきました。」 Berapa lama perjalanan?',['15 menit','30 menit','45 menit','1 jam'],1,'8:00 ke 8:30 = 30 menit.'],['Teks: 「この 店は 月曜日が 休みです。火曜日は あいています。」 Kapan toko tutup?',['Senin','Selasa','Rabu','Minggu'],0,'月曜日が休み berarti Senin libur/tutup.']
+  ],
+  "Mendengarkan":[
+    ['Audio: 「みずを おねがいします。」 Apa yang diminta?',['air','kopi','roti','teh'],0,'みず berarti air.'],['Audio: 「あした 7じに おきます。」 Kapan bangun?',['6','7','8','9'],1,'7じに berarti pukul 7.'],['Audio: 「でんしゃで いきます。」 Transportasinya?',['bus','kereta','sepeda','jalan kaki'],1,'でんしゃ berarti kereta.'],['Audio: 「きょうは さむいですね。」 Keadaannya?',['panas','dingin','sibuk','ramai'],1,'さむい berarti dingin.'],['Audio: 「りんごを 三つ ください。」 Berapa apel?',['1','2','3','4'],2,'三つ berarti tiga buah.'],['Audio: 「学校は 8じからです。」 Sekolah mulai…',['7','8','9','10'],1,'8じから = mulai pukul 8.'],['Audio: 「日曜日に うちで べんきょうします。」 Belajar di mana?',['sekolah','rumah','perpustakaan','taman'],1,'うち berarti rumah.'],['Audio: 「きのう えいがを みました。」 Apa yang dilakukan?',['membaca buku','menonton film','makan','belanja'],1,'えいがをみました berarti menonton film.'],['Audio: 「おとうさんは 会社員です。」 Pekerjaan ayah?',['guru','pegawai perusahaan','dokter','murid'],1,'会社員 berarti pegawai perusahaan.'],['Audio: 「コーヒーは いくらですか。300円です。」 Harga kopi?',['100','200','300','400'],2,'Jawaban audio: 300円です.'],['Audio: 「駅は どこですか。あそこです。」 Apa yang ditanyakan?',['waktu','harga','lokasi stasiun','nama'],2,'どこですか menanyakan lokasi.'],['Audio: 「毎朝 パンを たべます。」 Kebiasaan apa?',['sarapan roti','minum kopi','tidur','berlari'],0,'毎朝パンをたべます = setiap pagi makan roti.'],['Audio: 「田中さんは きません。」 Siapa yang tidak datang?',['Yamada','Tanaka','Suzuki','Sato'],1,'Nama yang disebut adalah Tanaka.'],['Audio: 「本を 5さつ かりました。」 Berapa buku dipinjam?',['3','4','5','6'],2,'5さつ berarti lima buku.'],['Audio: 「あしたは 雨です。」 Cuaca besok?',['cerah','hujan','bersalju','berawan'],1,'雨 berarti hujan.'],['Audio: 「スーパーは 10じまでです。」 Toko buka sampai…',['8','9','10','11'],2,'10じまで = sampai pukul 10.'],['Audio: 「いっしょに ごはんを たべませんか。」 Apa maksud pembicara?',['mengajak makan','menolak makan','bertanya harga','meminta arah'],0,'～ませんか dipakai untuk mengajak.'],['Audio: 「わたしは 20さいです。」 Umurnya?',['18','19','20','21'],2,'20さい berarti berumur 20 tahun.'],['Audio: 「きょうは 金曜日です。」 Hari ini?',['Kamis','Jumat','Sabtu','Minggu'],1,'金曜日 berarti Jumat.'],['Audio: 「この かさは 1000円です。」 Harga payung?',['500','800','1000','1500'],2,'1000円 disebut langsung.']
+  ]
+},
+N4:{
+  "Kosakata":[
+    ['「必要」 artinya…',['perlu/diperlukan','berbahaya','berbeda','sederhana'],0,'必要（ひつよう） berarti perlu/diperlukan.'],['「経験」 artinya…',['pengalaman','penjelasan','rencana','peraturan'],0,'経験（けいけん） berarti pengalaman.'],['「最近」 berarti…',['dulu','akhir-akhir ini','besok','selamanya'],1,'最近（さいきん） berarti akhir-akhir ini.'],['「説明」 berarti…',['penjelasan','perjalanan','undangan','perubahan'],0,'説明（せつめい） berarti penjelasan.'],['「将来」 berarti…',['masa depan','masa lalu','hari ini','waktu makan'],0,'将来（しょうらい） berarti masa depan.'],['「場合」 paling dekat artinya…',['keadaan/kasus','jawaban','orang','tempat'],0,'場合（ばあい） berarti keadaan atau kasus.'],['「準備」 berarti…',['persiapan','pembayaran','perjalanan','pertengkaran'],0,'準備（じゅんび） berarti persiapan.'],['「連絡」 berarti…',['menghubungi/kontak','mencuci','menyimpan','meminjam'],0,'連絡（れんらく） berarti menghubungi/kontak.'],['「約束」 berarti…',['janji','musim','cuaca','aturan sekolah'],0,'約束（やくそく） berarti janji.'],['「途中」 berarti…',['tengah/perjalanan berlangsung','awal','akhir','luar'],0,'途中（とちゅう） berarti di tengah/perjalanan berlangsung.'],['「参加」 berarti…',['berpartisipasi','menghilang','mengganti','memperbaiki'],0,'参加（さんか） berarti berpartisipasi.'],['「決める」 berarti…',['memutuskan','menghapus','meminjam','menjelaskan'],0,'決める（きめる） berarti memutuskan.'],['「続ける」 berarti…',['melanjutkan','menghentikan','menjual','menutup'],0,'続ける（つづける） berarti melanjutkan.'],['「比べる」 berarti…',['membandingkan','menghafal','menggambar','mengirim'],0,'比べる（くらべる） berarti membandingkan.'],['「増える」 berarti…',['bertambah','berkurang','berubah warna','berhenti'],0,'増える（ふえる） berarti bertambah.'],['「減る」 berarti…',['berkurang','bertambah','berpindah','berputar'],0,'減る（へる） berarti berkurang.'],['「危険」 berarti…',['berbahaya','aman','tenang','mudah'],0,'危険（きけん） berarti berbahaya.'],['「特別」 berarti…',['khusus','biasa','lambat','murah'],0,'特別（とくべつ） berarti khusus.'],['「自由」 berarti…',['bebas','sibuk','terlambat','terbatas'],0,'自由（じゆう） berarti bebas.'],['「普通」 berarti…',['biasa/umum','istimewa','sulit','berisik'],0,'普通（ふつう） berarti biasa/umum.']
+  ],
+  "Tata Bahasa":[
+    ['雨が降った___、試合は中止になりました。',['ので','まで','しか','でも'],0,'ので menunjukkan alasan.'],['日本へ行く___、日本語を勉強しています。',['ために','だけ','しか','までに'],0,'ために menunjukkan tujuan.'],['宿題をして___、テレビを見ました。',['から','まで','しか','ほど'],0,'～てから berarti setelah melakukan.'],['この本は 子ども___ 読めます。',['でも','しか','ほど','だけで'],0,'でも dapat berarti bahkan/untuk menekankan kemungkinan: anak-anak pun bisa membaca.'],['駅に着い___、電話してください。',['たら','ても','ながら','しか'],0,'～たら menyatakan kondisi setelah tiba.'],['毎日練習すれば、上手に___と思います。',['なる','なった','ならないで','なって'],0,'～ば menyatakan kondisi; なると思います.'],['日本語が話せる___なりました。',['ように','ために','そうに','ほど'],0,'～ようになる menunjukkan perubahan kemampuan/kebiasaan.'],['忘れない___、メモしてください。',['ように','ので','しか','ながら'],0,'～ように menunjukkan tujuan agar sesuatu tidak terjadi.'],['電車は バス___ 速いです。',['より','ほど','しか','まで'],0,'より dipakai untuk perbandingan.'],['この問題は 思った___ 難しくありません。',['ほど','しか','まで','だけ'],0,'～ほど…ない = tidak sesulit yang dibayangkan.'],['学生の___、勉強を一生懸命しました。',['とき','ため','しか','ので'],0,'～とき berarti ketika.'],['食べ___ ながら、テレビを見ます。',['ながら','ので','ても','ばかり'],0,'～ながら berarti sambil.'],['彼は まだ 来て___。',['いません','ありません','しません','なりません'],0,'まだ + negatif: belum datang.'],['この店は 安い___、おいしいです。',['し','ので','まで','しか'],0,'～し dapat menghubungkan beberapa alasan/sifat.'],['明日は 雨___ かもしれません。',['かも','では','だけ','ほど'],0,'～かもしれません berarti mungkin.'],['先生に 本を 貸して___ました。',['いただき','くれ','あげ','もらい'],0,'～ていただきました adalah menerima bantuan secara sopan.'],['友達に 手伝って___。',['もらいました','あげました','くれません','なりました'],0,'～てもらいました berarti saya menerima bantuan.'],['忙しい___、毎日運動しています。',['のに','ので','ため','から'],0,'のに menunjukkan kontras: meskipun sibuk.'],['この薬を飲む___、少し休んでください。',['まえに','ながら','しか','ほど'],0,'～まえに berarti sebelum.'],['日本に来て___、日本語が好きになりました。',['から','まで','しか','だけ'],0,'～てから berarti sejak/setelah datang.']
+  ],
+  "Membaca":[
+    ['Teks: 「最近、毎朝ジョギングをしています。最初は10分でしたが、今は30分続けられます。」 Sekarang berapa lama jogging?',['10 menit','20 menit','30 menit','60 menit'],2,'今は30分と disebut langsung.'],['Teks: 「雨が降ったので、試合は来週に延期されました。」 Mengapa pertandingan ditunda?',['peserta sakit','hujan','lapangan rusak','guru tidak datang'],1,'雨が降ったので = karena hujan.'],['Teks: 「旅行の前にホテルを予約しました。しかし、電車の切符はまだ買っていません。」 Apa yang belum dilakukan?',['memesan hotel','membeli tiket kereta','berangkat','makan'],1,'まだ買っていません berarti belum membeli.'],['Teks: 「この町では春になると桜がたくさん咲きます。毎年多くの人が見に来ます。」 Mengapa banyak orang datang?',['untuk melihat sakura','untuk bekerja','untuk berbelanja','untuk belajar'],0,'Mereka datang untuk melihat 桜.'],['Teks: 「山田さんは約束の時間より20分早く来ました。」 Bagaimana Yamada datang?',['20 menit terlambat','tepat waktu','20 menit lebih awal','1 jam lebih awal'],2,'より20分早く = 20 menit lebih awal.'],['Teks: 「健康のために、毎日野菜を食べて、夜は早く寝るようにしています。」 Apa yang dilakukan untuk kesehatan?',['sering begadang','makan sayur dan tidur cepat','tidak makan','berlari hanya Minggu'],1,'Stimulus menyebut makan sayur dan tidur lebih awal.'],['Teks: 「図書館は午後5時までです。ただし、金曜日は午後7時まで開いています。」 Jumat tutup pukul…',['5','6','7','8'],2,'金曜日は午後7時まで.'],['Teks: 「仕事が終わったら、駅前のレストランで友達と会う予定です。」 Apa rencananya?',['bertemu teman di restoran dekat stasiun','pulang langsung','belajar di perpustakaan','belanja di stasiun'],0,'駅前のレストランで友達と会う予定.'],['Teks: 「日本語の試験のために、毎晩1時間漢字を復習しています。」 Mengapa mengulang kanji?',['untuk ujian Jepang','untuk perjalanan','untuk pekerjaan paruh waktu','untuk olahraga'],0,'日本語の試験のために = untuk ujian bahasa Jepang.'],['Teks: 「電車が遅れたため、会議に10分遅れてしまいました。」 Mengapa terlambat?',['sakit','kereta terlambat','lupa waktu','macet'],1,'電車が遅れたため = karena kereta terlambat.'],['Teks: 「この店では現金だけでなく、カードも使えます。」 Selain uang tunai, apa yang bisa digunakan?',['cek','kartu','kupon','ponsel saja'],1,'カードも使えます.'],['Teks: 「来月から新しい仕事を始めるので、今月は準備をしています。」 Kapan mulai pekerjaan baru?',['bulan lalu','bulan ini','bulan depan','tahun depan'],2,'来月から = mulai bulan depan.'],['Teks: 「弟は料理が好きで、週末になると家族のために夕食を作ります。」 Kapan memasak?',['setiap pagi','hari kerja','akhir pekan','setiap malam'],2,'週末になると = ketika akhir pekan.'],['Teks: 「この薬は食事のあとに飲んでください。一日に三回です。」 Kapan minum obat?',['sebelum makan','setelah makan','saat tidur','sekali seminggu'],1,'食事のあと = setelah makan.'],['Teks: 「駅まで歩けば15分ですが、自転車なら5分です。」 Berapa menit dengan sepeda?',['5','10','15','20'],0,'自転車なら5分.'],['Teks: 「先生は、試験では辞書を使ってはいけないと言いました。」 Apa yang dilarang?',['menggunakan kamus','menulis','membaca','datang terlambat'],0,'使ってはいけない = tidak boleh menggunakan.'],['Teks: 「彼は忙しいのに、友達の引っ越しを手伝いました。」 Apa yang dilakukan meskipun sibuk?',['pindah rumah sendiri','membantu pindahan teman','pergi berlibur','belajar'],1,'友達の引っ越しを手伝いました.'],['Teks: 「明日のイベントは雨の場合、中止になります。」 Kapan acara dibatalkan?',['jika hujan','jika cerah','jika terlambat','jika peserta sedikit'],0,'雨の場合 = dalam keadaan hujan.'],['Teks: 「新しい駅ができてから、この町は前より便利になりました。」 Apa yang menjadi lebih nyaman?',['sekolah','kota/daerah ini','rumah','pekerjaan'],1,'この町は…便利になりました.'],['Teks: 「宿題が終わってから、ゲームをすることにしました。」 Kapan bermain game?',['sebelum tugas','setelah tugas selesai','saat pelajaran','besok pagi'],1,'宿題が終わってから = setelah PR selesai.']
+  ],
+  "Mendengarkan":[
+    ['Audio: 「雨が降ったので、今日は試合がありません。」 Apa yang terjadi?',['pertandingan tetap berjalan','pertandingan dibatalkan/tidak ada','pertandingan dipercepat','latihan dipindah besok'],1,'Karena hujan, hari ini tidak ada pertandingan.'],['Audio: 「駅で友達に会ってから、一緒に映画を見ました。」 Apa urutannya?',['film lalu bertemu','bertemu teman lalu menonton film','pulang lalu bertemu','makan lalu tidur'],1,'会ってから menunjukkan bertemu dahulu, lalu menonton.'],['Audio: 「明日は午後から雨かもしれません。」 Kapan mungkin hujan?',['pagi','siang setelahnya','tengah malam saja','tidak diketahui sama sekali'],1,'午後から = mulai sore/siang setelahnya.'],['Audio: 「健康のために、毎朝30分歩くようにしています。」 Apa kebiasaannya?',['berlari 1 jam','berjalan 30 menit setiap pagi','tidur pagi','bersepeda malam'],1,'毎朝30分歩く.'],['Audio: 「この電車は新宿に止まりますか。いいえ、次の電車です。」 Kereta ini berhenti di Shinjuku?',['ya','tidak','hanya malam','tidak disebut'],1,'Jawabannya いいえ.'],['Audio: 「会議は3時ではなく、4時からです。」 Rapat mulai kapan?',['2','3','4','5'],2,'3時ではなく4時 = bukan jam 3, tetapi jam 4.'],['Audio: 「忘れないように、スマホにメモしました。」 Mengapa membuat catatan?',['agar tidak lupa','agar cepat tidur','agar bisa menjual','agar tidak pergi'],0,'忘れないように = agar tidak lupa.'],['Audio: 「仕事が終わったら、スーパーに寄って帰ります。」 Setelah kerja akan…',['langsung tidur','mampir ke supermarket lalu pulang','ke sekolah','berolahraga'],1,'スーパーに寄って帰ります.'],['Audio: 「この店は安いし、おいしいし、よく来ます。」 Mengapa sering datang?',['murah dan enak','jauh dan mahal','tutup cepat','hanya dekat rumah'],0,'安いし、おいしいし memberi dua alasan.'],['Audio: 「旅行にはパスポートが必要です。」 Apa yang diperlukan?',['paspor','kamus','payung','sepeda'],0,'パスポートが必要.'],['Audio: 「来週の月曜日までにレポートを出してください。」 Batas waktu?',['hari ini','Senin minggu depan','Jumat ini','bulan depan'],1,'月曜日までに = paling lambat Senin.'],['Audio: 「電車よりバスのほうが安いです。」 Mana lebih murah?',['kereta','bus','keduanya sama','tidak diketahui'],1,'バスのほうが安い.'],['Audio: 「先生に質問したところ、すぐ説明してくれました。」 Apa yang dilakukan guru?',['memberi penjelasan','pergi','menolak','meminjam buku'],0,'説明してくれました = guru menjelaskan kepada pembicara.'],['Audio: 「まだ宿題が終わっていません。」 Kondisi PR?',['sudah selesai','belum selesai','tidak ada PR','sudah dikumpulkan'],1,'まだ…終わっていません = belum selesai.'],['Audio: 「日本に来てから、毎日日本語を使っています。」 Sejak kapan memakai Jepang?',['sebelum datang','sejak datang ke Jepang','tahun depan','hanya kemarin'],1,'来てから = sejak/setelah datang.'],['Audio: 「この薬を飲めば、よくなると思います。」 Apa yang diperkirakan?',['akan membaik','akan memburuk','tidak berubah','harus pergi'],0,'よくなると思います = diperkirakan membaik.'],['Audio: 「電車が遅れたので、10分遅刻しました。」 Berapa terlambat?',['5','10','20','30'],1,'10分遅刻.'],['Audio: 「週末は家でゆっくりすることにしました。」 Apa rencana akhir pekan?',['bepergian','bersantai di rumah','bekerja','belajar di sekolah'],1,'家でゆっくりする.'],['Audio: 「会議の途中で電話が鳴りました。」 Kapan telepon berbunyi?',['sebelum rapat','di tengah rapat','setelah rapat','besok'],1,'途中 = di tengah.'],['Audio: 「参加したい人は、名前を書いてください。」 Siapa yang harus menulis nama?',['yang ingin ikut','yang tidak ikut','guru saja','semua orang yang pulang'],0,'参加したい人 = orang yang ingin berpartisipasi.']
+  ]
+}
+};
+
+function makeQ(row,section,id){return {id,section,q:row[0],o:row[1],a:row[2],e:row[3],skill:section,type:'mc'};}
+function rotate(arr,n){return arr.slice(n).concat(arr.slice(0,n));}
+function buildJLPT(level,testNo){
+  const bank=V8_BANK[level],out=[];
+  Object.keys(bank).forEach(section=>{
+    const rows=rotate(bank[section],(testNo-1)*3%bank[section].length).slice(0,10);
+    rows.forEach((r,i)=>out.push(makeQ(r,section,`${level}-${testNo}-${section}-${i}`)));
+  });
+  return out;
+}
+function buildTKA(testNo){
+  const raw=SOURCE_TKA.TKA||[];
+  const rows=rotate(raw,(testNo-1)*2%Math.max(1,raw.length));
+  const out=[];
+  rows.forEach((x,i)=>{
+    if(x.type==='pgk') out.push({...x,id:`TKA-${testNo}-${i}`,section:i%2?'Membaca':'Pemahaman'});
+    else out.push({...x,id:`TKA-${testNo}-${i}`,section:['Kosakata','Tata bahasa','Membaca','Mendengarkan'][i%4],type:'mc'});
+  });
+  // Always give TKA a balanced 40-question session; repeat/rotate source items when the source bank is smaller.
+  const base=out.slice(); while(out.length<40) out.push({...base[out.length%base.length],id:`TKA-${testNo}-extra-${out.length}`});
+  return out.slice(0,40);
+}
+function questionsFor(level,testNo){return level==='TKA'?buildTKA(testNo):buildJLPT(level,testNo)}
+const TEST_CATALOG={N5:20,N4:20,TKA:10};
+let selectedTestLevel='N5',selectedTestNo=1,testActive=false,testSeconds=5400,testTimerId=null,testAnswers={};
+function levelTitle(l){return l==='TKA'?'TKA Bahasa Jepang':`JLPT ${l}`}
+function sectionCounts(qs){return ['Kosakata','Tata bahasa','Membaca','Mendengarkan'].map(s=>[s,qs.filter(q=>q.section===s).length])}
+function renderCatalog(){
+ const el=$('#testCatalog'); if(!el)return;
+ el.innerHTML=`<div class="catalog-head"><div><b>${TEST_CATALOG[selectedTestLevel]} test ditemukan</b><small>Setiap test · 90 menit · 4 sesi</small></div><div class="catalog-filter"><span>Urutan: Test 1 →</span></div></div><div class="test-grid">${Array.from({length:TEST_CATALOG[selectedTestLevel]},(_,i)=>{const n=i+1,qs=questionsFor(selectedTestLevel,n),pct=Number(localStorage.getItem(`nh_progress_${selectedTestLevel}_${n}`)||0),locked=n>3&&selectedTestLevel!=='TKA';return `<article class="test-card ${locked?'locked':''}"><div class="test-card-top"><h3>Test ${n}</h3><span>${locked?'🔒':'○'} </span></div><div class="test-card-line">📣 Titik lulus: <b>80 poin</b></div><div class="test-card-line">◷ Waktu: <b>90 menit</b></div><div class="test-card-line">◔ Kemajuan <b>${pct}%</b></div><div class="test-card-sections">${sectionCounts(qs).map(x=>`<span>${x[0]} ${x[1]}</span>`).join('')}</div><button class="test-card-detail" data-test-open="${n}">› Rincian</button></article>`}).join('')}</div>`;
+ el.querySelectorAll('[data-test-open]').forEach(b=>b.onclick=()=>openTestDetail(+b.dataset.testOpen));
+}
+function openTestDetail(n){
+ selectedTestNo=n; const qs=questionsFor(selectedTestLevel,n),el=$('#testDetail'); if(!el)return;
+ el.classList.remove('hidden');
+ el.innerHTML=`<div class="detail-head"><div><span class="eyebrow">${levelTitle(selectedTestLevel)}</span><h2>Test ${n}</h2><p>80 poin · 90 menit · ${qs.length} soal</p></div><button class="btn primary" id="beginSelectedTest">▶ Mulai Test ${n}</button></div><div class="section-stat-grid">${sectionCounts(qs).map(([s,c])=>`<div><b>${s}</b><strong>${c}</strong><small>soal</small></div>`).join('')}</div><div class="detail-note">📌 Setelah selesai, hasil akan dibagi menjadi <b>Kosakata · Tata bahasa · Membaca · Mendengarkan</b>, lengkap dengan analisis benar/salah dan pembahasan.</div>`;
+ $('#beginSelectedTest').onclick=startTest;
+ el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function updateTestProgress(){
- const a=getTestQuestions(),n=Object.keys(testAnswers).filter(k=>testAnswers[k]!=null).length;
- if($("#runningProgressText"))$("#runningProgressText").textContent=`${n} / ${a.length}`;
- if($("#testProgress"))$("#testProgress").style.width=(n/a.length*100)+"%";
+ const qs=questionsFor(selectedTestLevel,selectedTestNo),keys=new Set(Object.keys(testAnswers));
+ if($('#runningProgressText'))$('#runningProgressText').textContent=`${keys.size} / ${qs.length}`;
+ if($('#testProgress'))$('#testProgress').style.width=(keys.size/qs.length*100)+'%';
+}
+function speakJP(text){if(!('speechSynthesis' in window))return;const u=new SpeechSynthesisUtterance(text.replace(/^Audio:\s*/,'').replace(/「|」/g,''));u.lang='ja-JP';u.rate=.86;window.speechSynthesis.cancel();window.speechSynthesis.speak(u)}
+function renderQuestion(q,i){
+ const audio=q.section==='Mendengarkan'?`<button type="button" class="audio-question" data-speak="${encodeURIComponent(q.q.replace(/^Audio:\s*/,''))}">🔊 Putar audio</button>`:'';
+ if(q.type==='pgk')return `<article class="test-question" id="testQ${i}"><div class="question-head"><span class="q-number">${i+1}</span><div><small class="section-chip">${q.section}</small><h3>${q.q}</h3>${audio}</div></div>${q.statements.map((s,j)=>`<div class="pgk-row"><div><b>${String.fromCharCode(65+j)}.</b> ${s[0]}</div><label><input type="radio" name="tq${i}_${j}" value="true"> Benar</label><label><input type="radio" name="tq${i}_${j}" value="false"> Salah</label></div>`).join('')}</article>`;
+ return `<article class="test-question" id="testQ${i}"><div class="question-head"><span class="q-number">${i+1}</span><div><small class="section-chip">${q.section}</small><h3>${q.q}</h3>${audio}</div></div><div class="test-options">${q.o.map((o,j)=>`<label><input type="radio" name="tq${i}" value="${j}"><span>${o}</span></label>`).join('')}</div></article>`;
 }
 function startTest(){
- if(testActive)return;
- testActive=true;testAnswers={};testSeconds=1200;
- $("#testSetup")?.classList.add("hidden");$("#testRunning")?.classList.remove("hidden");$("#testResult")?.classList.add("hidden");
- if($("#runningTestLabel"))$("#runningTestLabel").textContent=testLabel();
- const a=getTestQuestions();
- $("#testArea").innerHTML=a.map((x,i)=>{
-  if(x.type==="pgk")return `<article class="test-question" id="testQ${i}"><div class="question-head"><span class="q-number">${i+1}</span><div><h3>${x.q}</h3><small class="skill-tag">${x.skill||""}</small></div></div><div class="pgk-grid">${x.statements.map((s,j)=>`<div class="pgk-row"><div class="pgk-statement"><b>${String.fromCharCode(65+j)}.</b> ${s[0]}</div><label><input type="radio" name="tq${i}_${j}" value="true"> Benar</label><label><input type="radio" name="tq${i}_${j}" value="false"> Salah</label></div>`).join("")}</div></article>`;
-  return `<article class="test-question" id="testQ${i}"><div class="question-head"><span class="q-number">${i+1}</span><div><h3>${x.q}</h3><small class="skill-tag">${x.skill||""}</small></div></div><div class="test-options">${x.o.map((o,j)=>`<label><input type="radio" name="tq${i}" value="${j}"><span>${o}</span></label>`).join("")}</div></article>`;
- }).join("");
- $("#testArea").querySelectorAll("input").forEach(el=>el.addEventListener("change",()=>{testAnswers[el.name]=el.value;updateTestProgress()}));
- updateTestProgress();
- if(testTimerId)clearInterval(testTimerId);
- testTimerId=setInterval(()=>{testSeconds--;if($("#testTimer"))$("#testTimer").textContent=formatTime(testSeconds);if(testSeconds<=0)submitTest(true)},1000);
- window.scrollTo({top:0,behavior:"smooth"});
+ if(testActive)return; testActive=true;testAnswers={};testSeconds=5400;
+ $('#testCatalog')?.classList.add('hidden');$('#testDetail')?.classList.add('hidden');$('#testRunning')?.classList.remove('hidden');$('#testResult')?.classList.add('hidden');
+ $('#runningTestLabel').textContent=`${levelTitle(selectedTestLevel)} · Test ${selectedTestNo}`;$('#testTimer').textContent='90:00';
+ const qs=questionsFor(selectedTestLevel,selectedTestNo);$('#testArea').innerHTML=qs.map(renderQuestion).join('');
+ $('#testArea').querySelectorAll('input').forEach(el=>el.addEventListener('change',()=>{testAnswers[el.name]=el.value;updateTestProgress()}));
+ $('#testArea').querySelectorAll('.audio-question').forEach(b=>b.onclick=()=>speakJP(decodeURIComponent(b.dataset.speak)));
+ updateTestProgress(); if(testTimerId)clearInterval(testTimerId);testTimerId=setInterval(()=>{testSeconds--;$('#testTimer').textContent=formatTime(testSeconds);if(testSeconds<=0)submitTest(true)},1000);window.scrollTo({top:0,behavior:'smooth'});
 }
 function collectTest(){
- const a=getTestQuestions();
- return a.map((x,i)=>{
-  if(x.type==="pgk"){
-   let ok=true,answered=0,given=[];
-   x.statements.forEach((s,j)=>{const el=document.querySelector(`input[name="tq${i}_${j}"]:checked`);const v=el?el.value:null;given.push(v);if(v!==null)answered++;if(v!==String(s[1]))ok=false});
-   return {ok:ok&&answered===x.statements.length,answered,given};
-  }
-  const el=document.querySelector(`input[name="tq${i}"]:checked`);
-  return {ok:!!el&&+el.value===x.a,answered:!!el,given:el?el.value:null};
+ const qs=questionsFor(selectedTestLevel,selectedTestNo);return qs.map((q,i)=>{
+  if(q.type==='pgk'){let ok=true,answered=0,given=[];q.statements.forEach((s,j)=>{const el=document.querySelector(`input[name="tq${i}_${j}"]:checked`);const v=el?el.value:null;given.push(v);if(v!==null)answered++;if(v!==String(s[1]))ok=false});return {ok:ok&&answered===q.statements.length,answered,given}}
+  const el=document.querySelector(`input[name="tq${i}"]:checked`);return {ok:!!el&&+el.value===q.a,answered:!!el,given:el?el.value:null};
  });
 }
-function submitTest(auto=false){
- if(!testActive)return;
- testActive=false;if(testTimerId)clearInterval(testTimerId);testTimerId=null;
- const a=getTestQuestions(),r=collectTest(),score=r.filter(x=>x.ok).length,pct=Math.round(score/a.length*100);
- state.testRuns=(state.testRuns||0)+1;state.attempts=(state.attempts||0)+a.length;state.correct=(state.correct||0)+score;
- state.daily=state.daily||{date:new Date().toISOString().slice(0,10),count:0};state.daily.count+=a.length;save();
- $("#testRunning")?.classList.add("hidden");$("#testSetup")?.classList.remove("hidden");$("#testResult")?.classList.remove("hidden");
- $("#testResult").innerHTML=`<div class="result-hero"><span class="eyebrow">${auto?"WAKTU HABIS · ":""}${testLabel().toUpperCase()}</span><div class="score-number">${pct}%</div><h2>${score} / ${a.length} benar</h2><p>${pct>=90?"🏆 Luar biasa!":pct>=80?"🔥 Sangat bagus!":pct>=60?"👍 Lumayan, ulangi yang salah.":"💪 Gunakan pembahasan untuk belajar lagi."}</p></div>
- <div class="review-answer-list">${a.map((x,i)=>{const z=r[i];let correct,your;if(x.type==="pgk"){correct=x.statements.map((s,j)=>`${String.fromCharCode(65+j)} ${s[1]?"Benar":"Salah"}`).join(" · ");your=z.given.map((v,j)=>`${String.fromCharCode(65+j)} ${v==null?"—":v==="true"?"Benar":"Salah"}`).join(" · ")}else{correct=x.o[x.a];your=z.given==null?"Belum dijawab":x.o[+z.given]}return `<article class="answer-review ${z.ok?"correct":"wrong"}"><div class="answer-review-top"><b>Soal ${i+1}</b><span>${z.ok?"✓ Benar":"✕ Salah"}</span></div><p>${x.q}</p><div><b>Jawaban benar:</b> ${correct}</div><div><b>Jawaban kamu:</b> ${your}</div><div class="explanation"><b>💡 Pembahasan:</b> ${x.e||"Cocokkan kata kunci pada stimulus dengan pilihan jawaban."}</div></article>`}).join("")}</div>
- <button type="button" class="btn primary" id="retakeTest">🔄 Ulangi ${testLabel()}</button>`;
- $("#retakeTest").onclick=startTest;
- if(typeof renderDashboard==="function")renderDashboard();if(typeof renderAchievements==="function")renderAchievements();if(typeof renderProfile==="function")renderProfile();
- window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+function renderResult(qs,res,auto){
+ const section=['Kosakata','Tata bahasa','Membaca','Mendengarkan'];const rows=section.map(s=>{const ix=qs.map((q,i)=>q.section===s?i:-1).filter(i=>i>=0),ok=ix.filter(i=>res[i].ok).length;return [s,ok,ix.length,Math.round(ok/ix.length*100)]});
+ const total=res.filter(x=>x.ok).length,pct=Math.round(total/qs.length*100);
+ return `<div class="result-cover"><div><span class="eyebrow">${auto?'WAKTU HABIS · ':''}${levelTitle(selectedTestLevel).toUpperCase()}</span><h2>Test ${selectedTestNo} · Hasil</h2><p>Test Date ${new Date().toLocaleDateString('id-ID',{year:'numeric',month:'long',day:'2-digit'})}</p></div><div class="result-total"><b>${pct}</b><span>Poin / 100</span><small>${total}/${qs.length} soal benar</small></div></div><div class="result-sections">${rows.map(r=>`<div class="result-section-card"><div class="result-section-head"><div><b>${r[0]}</b><span>Benar ${r[1]}/${r[2]}</span></div><strong>${r[3]}%</strong></div><div class="mini-bar"><i style="width:${r[3]}%"></i></div><button class="detail-jump" data-section="${r[0]}">Rincian</button></div>`).join('')}</div><div class="result-tabs"><button class="active" data-filter="Semua">Semua</button><button data-filter="Salah">Salah</button><button data-filter="Benar">Benar</button></div><div id="resultReviews" class="result-reviews"></div><div class="result-actions"><button class="btn primary" id="backToCatalog">← Kembali ke daftar test</button><button class="btn" id="retryCurrent">🔄 Ulangi Test ${selectedTestNo}</button></div>`;
 }
-document.querySelectorAll(".v8-test-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".v8-test-tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");testMode=b.dataset.test;renderTestSetup()}));
-$("#startTest")?.addEventListener("click",startTest);$("#submitTest")?.addEventListener("click",()=>submitTest(false));renderTestSetup();
+function renderReviews(filter='Semua',section='Semua'){
+ const qs=questionsFor(selectedTestLevel,selectedTestNo),res=window._lastTestResults||[],el=$('#resultReviews');if(!el)return;
+ el.innerHTML=qs.map((q,i)=>({q,i,r:res[i]})).filter(x=>(filter==='Semua'||(filter==='Benar'?x.r.ok:!x.r.ok))&&(section==='Semua'||x.q.section===section)).map(x=>{const q=x.q,r=x.r;let correct,your;if(q.type==='pgk'){correct=q.statements.map((s,j)=>`${String.fromCharCode(65+j)} ${s[1]?'Benar':'Salah'}`).join(' · ');your=r.given.map((v,j)=>`${String.fromCharCode(65+j)} ${v==null?'—':v==='true'?'Benar':'Salah'}`).join(' · ')}else{correct=q.o[q.a];your=r.given==null?'Belum dijawab':q.o[+r.given]};return `<article class="answer-review ${r.ok?'correct':'wrong'}"><div class="answer-review-top"><div><b>Soal ${x.i+1}</b><span class="section-chip">${q.section}</span></div><span>${r.ok?'✓ Benar':'✕ Salah'}</span></div><p>${q.q}</p><div><b>Jawaban benar:</b> ${correct}</div><div><b>Jawaban kamu:</b> ${your}</div><div class="explanation"><b>Jelaskan:</b><br>${q.e||'Periksa kembali kata kunci dan konteks soal.'}</div></article>`}).join('')||'<p class="muted">Tidak ada soal pada filter ini.</p>';
+}
+function submitTest(auto=false){
+ if(!testActive)return;testActive=false;if(testTimerId)clearInterval(testTimerId);testTimerId=null;
+ const qs=questionsFor(selectedTestLevel,selectedTestNo),res=collectTest(),score=res.filter(x=>x.ok).length,pct=Math.round(score/qs.length*100);window._lastTestResults=res;
+ localStorage.setItem(`nh_progress_${selectedTestLevel}_${selectedTestNo}`,String(pct));
+ state.testRuns=(state.testRuns||0)+1;state.attempts=(state.attempts||0)+qs.length;state.correct=(state.correct||0)+score;save();
+ $('#testRunning').classList.add('hidden');$('#testResult').classList.remove('hidden');$('#testResult').innerHTML=renderResult(qs,res,auto);renderReviews();
+ document.querySelectorAll('.result-tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.result-tabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderReviews(b.dataset.filter)});
+ document.querySelectorAll('.detail-jump').forEach(b=>b.onclick=()=>renderReviews('Semua',b.dataset.section));
+ $('#backToCatalog').onclick=()=>{renderCatalog();$('#testResult').classList.add('hidden');$('#testCatalog').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})};
+ $('#retryCurrent').onclick=startTest;renderCatalog();if(typeof renderDashboard==='function')renderDashboard();if(typeof renderAchievements==='function')renderAchievements();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.test-level-tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.test-level-tabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');selectedTestLevel=b.dataset.level;$('#testDetail')?.classList.add('hidden');$('#testResult')?.classList.add('hidden');$('#testRunning')?.classList.add('hidden');$('#testCatalog')?.classList.remove('hidden');renderCatalog()});
+$('#submitTest')?.addEventListener('click',()=>submitTest(false));renderCatalog();
 
 /* ===== v7: SRS + Dashboard + Dictionary + Achievements + Speaking Tutor + Stroke Order ===== */
 state.srs = state.srs || {};
@@ -482,25 +544,73 @@ function renderAchievements(){
   }).join("");
   $("#achievementCount").textContent=`${unlocked} / ${ACH.length}`
 }
-function renderDictionary(){
-  const q=($("#dictSearch")?.value||"").toLowerCase().trim(),lv=$("#dictLevel")?.value||"ALL";
-  const arr=CARDS.filter(c=>(lv==="ALL"||c.level===lv)&&(!q||[c.word,c.reading,c.meaning,c.sentence].join(" ").toLowerCase().includes(q))).slice(0,60);
-  $("#dictResults").innerHTML=arr.map(c=>`<article class="dict-item" data-dict="${srsKey(c)}"><div class="jp">${c.word}</div><div class="reading">${c.reading}</div><b>${c.meaning}</b><small>${c.level} · ${c.category}</small></article>`).join("")||"<div class='panel'>Tidak ditemukan.</div>";
-  $$("#dictResults .dict-item").forEach(el=>el.onclick=()=>{
-    const c=CARDS.find(x=>srsKey(x)===el.dataset.dict);if(!c)return;
-    $("#dictDetail").classList.remove("hidden");
-    $("#dictDetail").innerHTML=`<div class="eyebrow">${c.level} · ${c.category}</div><h2 class="jp">${c.word}</h2><div class="reading">${c.reading}</div><h3>${c.meaning}</h3><p class="jp">${c.sentence}</p><p>${c.translation}</p><button class="btn primary" id="dictSpeak">🔊 Dengarkan</button>`;
-    $("#dictSpeak").onclick=()=>speak(c.reading);
-    $("#dictDetail").scrollIntoView({behavior:"smooth",block:"center"});
-    setModeStat("kanji");
-  });
+const VERB_TYPES={
+  "食べる":"ichidan","見る":"ichidan","寝る":"ichidan","起きる":"ichidan","始める":"ichidan","終わる":"godan","続ける":"ichidan","決める":"ichidan","考える":"ichidan","調べる":"ichidan","忘れる":"ichidan","覚える":"ichidan","比べる":"ichidan","変える":"ichidan","来る":"kuru","勉強する":"suru","参加する":"suru",
+  "飲む":"godan","読む":"godan","書く":"godan","行く":"iku","帰る":"godan","買う":"godan","話す":"godan","会う":"godan","聞く":"godan","使う":"godan","選ぶ":"godan","戻る":"godan","決まる":"godan"
+};
+const GODAN={"う":{i:"い",a:"わ",e:"え",o:"お",te:"って",past:"った"},"つ":{i:"ち",a:"た",e:"て",o:"と",te:"って",past:"った"},"る":{i:"り",a:"ら",e:"れ",o:"ろ",te:"って",past:"った"},"む":{i:"み",a:"ま",e:"め",o:"も",te:"んで",past:"んだ"},"ぶ":{i:"び",a:"ば",e:"べ",o:"ぼ",te:"んで",past:"んだ"},"ぬ":{i:"に",a:"な",e:"ね",o:"の",te:"んで",past:"んだ"},"く":{i:"き",a:"か",e:"け",o:"こ",te:"いて",past:"いた"},"ぐ":{i:"ぎ",a:"が",e:"げ",o:"ご",te:"いで",past:"いだ"},"す":{i:"し",a:"さ",e:"せ",o:"そ",te:"して",past:"した"}};
+function verbType(c){return VERB_TYPES[c.word]||VERB_TYPES[c.word.replace(/\s/g,'')]||null}
+function conjugateVerb(c){
+ const w=c.word, type=verbType(c), stem=w.slice(0,-1), last=w.slice(-1), g=GODAN[last];
+ if(!type)return null;
+ if(type==='ichidan'){
+  const s=stem;return {dictionary:w,polite:s+'ます',negative:s+'ない',politeNegative:s+'ません',past:s+'た',politePast:s+'ました',te:s+'て',progressive:s+'ています',progressiveNegative:s+'ていません',potential:s+'られる',potentialPolite:s+'られます',potentialNegative:s+'られない',passive:s+'られる',passivePolite:s+'られます',causative:s+'させる',causativePolite:s+'させます',causativePassive:s+'させられる',volitional:s+'よう',volitionalPolite:s+'ましょう',imperative:s+'ろ',conditionalBa:s+'れば',conditionalTara:s+'たら',desire:s+'たい',desireNegative:s+'たくない'};
+ }
+ if(type==='suru'){
+  const base=w.slice(0,-2),s=base+'し';return {dictionary:w,polite:s+'ます',negative:s+'ない',politeNegative:s+'ません',past:s+'た',politePast:s+'ました',te:s+'て',progressive:s+'ています',progressiveNegative:s+'ていません',potential:base+'できる',potentialPolite:base+'できます',potentialNegative:base+'できない',passive:s+'られる',passivePolite:s+'られます',causative:s+'させる',causativePolite:s+'させます',causativePassive:s+'させられる',volitional:s+'よう',volitionalPolite:s+'ましょう',imperative:s+'ろ',conditionalBa:s+'れば',conditionalTara:s+'たら',desire:s+'たい',desireNegative:s+'たくない'};
+ }
+ if(type==='kuru'){
+  return {dictionary:w,polite:'来ます',negative:'来ない',politeNegative:'来ません',past:'来た',politePast:'来ました',te:'来て',progressive:'来ています',progressiveNegative:'来ていません',potential:'来られる',potentialPolite:'来られます',potentialNegative:'来られない',passive:'来られる',passivePolite:'来られます',causative:'来させる',causativePolite:'来させます',causativePassive:'来させられる',volitional:'来よう',volitionalPolite:'来ましょう',imperative:'来い',conditionalBa:'来れば',conditionalTara:'来たら',desire:'来たい',desireNegative:'来たくない'};
+ }
+ if(type==='iku'){
+  return {dictionary:w,polite:'行きます',negative:'行かない',politeNegative:'行きません',past:'行った',politePast:'行きました',te:'行って',progressive:'行っています',progressiveNegative:'行っていません',potential:'行ける',potentialPolite:'行けます',potentialNegative:'行けない',passive:'行かれる',passivePolite:'行かれます',causative:'行かせる',causativePolite:'行かせます',causativePassive:'行かせられる',volitional:'行こう',volitionalPolite:'行きましょう',imperative:'行け',conditionalBa:'行けば',conditionalTara:'行ったら',desire:'行きたい',desireNegative:'行きたくない'};
+ }
+ return {dictionary:w,polite:w.slice(0,-1)+g.i,negative:w.slice(0,-1)+g.a+'ない',politeNegative:w.slice(0,-1)+g.i+'ません',past:w.slice(0,-1)+g.past,politePast:w.slice(0,-1)+g.i+'ました',te:w.slice(0,-1)+g.te,progressive:w.slice(0,-1)+g.te+'います',progressiveNegative:w.slice(0,-1)+g.te+'いません',potential:w.slice(0,-1)+g.e+'る',potentialPolite:w.slice(0,-1)+g.e+'ます',potentialNegative:w.slice(0,-1)+g.e+'ない',passive:w.slice(0,-1)+g.a+'れる',passivePolite:w.slice(0,-1)+g.a+'れます',causative:w.slice(0,-1)+g.a+'せる',causativePolite:w.slice(0,-1)+g.a+'せます',causativePassive:w.slice(0,-1)+g.a+'せられる',volitional:w.slice(0,-1)+g.o+'う',volitionalPolite:w.slice(0,-1)+g.i+'ましょう',imperative:w.slice(0,-1)+g.e,conditionalBa:w.slice(0,-1)+g.e+'ば',conditionalTara:w.slice(0,-1)+g.past+'ら',desire:w.slice(0,-1)+g.i+'たい',desireNegative:w.slice(0,-1)+g.i+'たくない'};
 }
-$("#reviewLevel")?.addEventListener("change",buildReview);
-$("#reviewAgain")?.addEventListener("click",()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate("again")});
-$("#reviewHard")?.addEventListener("click",()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate("hard")});
-$("#reviewGood")?.addEventListener("click",()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate("good")});
-$("#reviewEasy")?.addEventListener("click",()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate("easy")});
-$("#dictSearch")?.addEventListener("input",renderDictionary);$("#dictLevel")?.addEventListener("change",renderDictionary);
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function verbDetail(c){
+ const v=conjugateVerb(c);if(!v)return '';
+ const rows=[
+ ['Bentuk kamus · informal positif',v.dictionary,'Untuk menyatakan kebiasaan/fakta secara kasual.','私はご飯を '+v.dictionary+'。'],
+ ['ます形 · formal positif',v.polite,'Sopan; umum dipakai saat berbicara dengan guru/orang yang belum akrab.','私はご飯を '+v.polite+'。'],
+ ['ない形 · informal negatif',v.negative,'Menyatakan tidak melakukan.','今日はご飯を '+v.negative+'。'],
+ ['ません · formal negatif',v.politeNegative,'Versi sopan dari negatif.','今日はご飯を '+v.politeNegative+'。'],
+ ['た形 · informal lampau',v.past,'Menyatakan sudah melakukan.','昨日、ご飯を '+v.past+'。'],
+ ['ました · formal lampau',v.politePast,'Versi sopan lampau.','昨日、ご飯を '+v.politePast+'。'],
+ ['て形',v.te,'Menghubungkan aksi, permintaan, atau menjadi dasar beberapa pola.','ご飯を '+v.te+'ください。'],
+ ['～ています · sedang/keadaan berlangsung',v.progressive,'Menunjukkan aktivitas yang sedang berlangsung atau keadaan yang masih berlaku.','今、ご飯を '+v.progressive+'。'],
+ ['～ていません · sedang tidak',v.progressiveNegative,'Menyatakan belum/tidak sedang melakukan.','今、ご飯を '+v.progressiveNegative+'。'],
+ ['Potential · kemampuan',v.potential,'Menyatakan bisa/mampu melakukan.','私は日本語で '+v.potential+'。'],
+ ['Potential formal',v.potentialPolite,'Versi sopan kemampuan.','私は日本語で '+v.potentialPolite+'。'],
+ ['Potential negatif',v.potentialNegative,'Menyatakan tidak bisa.','今日は '+v.potentialNegative+'。'],
+ ['Passive · pasif',v.passive,'Subjek menerima tindakan.','私は先生に '+v.passive+'。'],
+ ['Passive formal',v.passivePolite,'Versi sopan pasif.','私は先生に '+v.passivePolite+'。'],
+ ['Causative · menyuruh/membiarkan',v.causative,'Membuat atau membiarkan seseorang melakukan.','先生は学生に '+v.causative+'。'],
+ ['Causative formal',v.causativePolite,'Versi sopan kausatif.','先生は学生に '+v.causativePolite+'。'],
+ ['Causative-passive · dipaksa',v.causativePassive,'Menyatakan dipaksa melakukan sesuatu.','私は先生に '+v.causativePassive+'。'],
+ ['Volitional · mari/akan',v.volitional,'Niat atau ajakan dalam gaya informal.','一緒に '+v.volitional+'。'],
+ ['Volitional formal',v.volitionalPolite,'Ajakan sopan.','一緒に '+v.volitionalPolite+'。'],
+ ['Imperative · perintah',v.imperative,'Perintah langsung; terasa tegas, jadi gunakan sesuai situasi.','早く '+v.imperative+'！'],
+ ['～ば · jika',v.conditionalBa,'Kondisional dengan ～ば.','時間があれば、'+v.conditionalBa+'。'],
+ ['～たら · jika/setelah',v.conditionalTara,'Kondisional atau setelah suatu kejadian.','時間があったら、'+v.conditionalTara+'。'],
+ ['～たい · ingin',v.desire,'Menyatakan keinginan pembicara untuk melakukan sesuatu.','私は日本へ '+v.desire+'。'],
+ ['～たくない · tidak ingin',v.desireNegative,'Menyatakan tidak ingin melakukan.','今日は '+v.desireNegative+'。']
+ ];
+ const typeLabel=verbType(c)==='ichidan'?'一段動詞 · Ichidan':verbType(c)==='godan'?'五段動詞 · Godan':verbType(c)==='suru'?'する動詞 · Irregular': '不規則 · Irregular';
+ return `<div class="dict-hero"><div><span class="dict-badge">${esc(c.level)} · ${esc(typeLabel)}</span><div class="dict-word jp">${esc(c.word)}</div><div class="dict-reading">${esc(c.reading)}</div><h3>${esc(c.meaning)}</h3><p>${esc(c.category)} · Bentuk dasar: <b>${esc(c.word)}</b></p></div><div class="dict-toolbar"><button id="dictSpeakWord">🔊 Dengarkan</button></div></div><div class="grammar-card"><h3>📐 Pola kalimat utama</h3><p><code>Topik は + objek を + kata kerja</code></p><div class="example-box"><b>Contoh:</b><br><span class="jp">私はご飯を${esc(v.polite)}。</span><br>Artinya: Saya ${esc(c.meaning)}.</div></div><div class="verb-table-wrap"><table class="verb-table"><thead><tr><th>Bentuk</th><th>Konjugasi</th><th>Kapan digunakan</th><th>Contoh pola</th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td><span class="verb-form jp">${esc(r[1])}</span></td><td>${esc(r[2])}</td><td><span class="jp">${esc(r[3])}</span></td></tr>`).join('')}</tbody></table></div><div class="grammar-card"><h3>🧠 Catatan belajar</h3><p>Gunakan bentuk <b>ます/ました/ません</b> saat membutuhkan gaya sopan. Bentuk kamus, ない, た, dan て lebih umum dalam pola informal dan tata bahasa.</p><p><b>Catatan:</b> bentuk pasif, kausatif, dan kausatif-pasif memiliki nuansa makna yang bergantung konteks.</p></div>`;
+}
+function renderDictionary(){
+ const q=($('#dictSearch')?.value||'').toLowerCase().trim(),lv=$('#dictLevel')?.value||'ALL',cat=$('#dictCategory')?.value||'Semua kategori';
+ const arr=CARDS.filter(c=>(lv==='ALL'||c.level===lv)&&(cat==='Semua kategori'||c.category===cat)&&(!q||[c.word,c.reading,c.meaning,c.sentence].join(' ').toLowerCase().includes(q))).slice(0,80);
+ $('#dictResults').innerHTML=arr.map(c=>`<article class="dict-item" data-dict="${esc(srsKey(c))}"><div class="jp">${esc(c.word)}</div><div class="reading">${esc(c.reading)}</div><b>${esc(c.meaning)}</b><small>${esc(c.level)} · ${esc(c.category)}${verbType(c)?' · Konjugasi lengkap':''}</small></article>`).join('')||"<div class='panel'>Tidak ditemukan.</div>";
+ $$('#dictResults .dict-item').forEach(el=>el.onclick=()=>{const c=CARDS.find(x=>srsKey(x)===el.dataset.dict);if(!c)return;$('#dictDetail').classList.remove('hidden');if(verbType(c))$('#dictDetail').innerHTML=verbDetail(c);else $('#dictDetail').innerHTML=`<div class="dict-hero"><div><span class="dict-badge">${esc(c.level)} · ${esc(c.category)}</span><div class="dict-word jp">${esc(c.word)}</div><div class="dict-reading">${esc(c.reading)}</div><h3>${esc(c.meaning)}</h3></div></div><div class="grammar-card"><h3>Contoh kalimat</h3><p class="jp">${esc(c.sentence)}</p><p>${esc(c.translation)}</p><button class="btn primary" id="dictSpeak">🔊 Dengarkan</button></div>`;$('#dictSpeakWord')?.addEventListener('click',()=>speak(c.reading));$('#dictSpeak')?.addEventListener('click',()=>speak(c.reading));$('#dictDetail').scrollIntoView({behavior:'smooth',block:'start'});setModeStat('kanji')});
+}
+$('#reviewLevel')?.addEventListener('change',buildReview);
+$('#reviewAgain')?.addEventListener('click',()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate('again')});
+$('#reviewHard')?.addEventListener('click',()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate('hard')});
+$('#reviewGood')?.addEventListener('click',()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate('good')});
+$('#reviewEasy')?.addEventListener('click',()=>{state.reviewCount=(state.reviewCount||0)+1;reviewRate('easy')});
+$('#dictSearch')?.addEventListener('input',renderDictionary);$('#dictLevel')?.addEventListener('change',renderDictionary);$('#dictCategory')?.addEventListener('change',renderDictionary);
 
 function enhanceStrokeTrainer(){
   if(!$("#strokeOrderInfo"))return;

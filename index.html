@@ -134,22 +134,25 @@
 </section>
 
 
+<section id="dictionary" class="page">
+  <div class="section-head"><div><span class="eyebrow">KAMUS LENGKAP</span><h2>📖 Kamus & Konjugasi Kata Kerja</h2><p>Pilih kata kerja untuk melihat bentuk informal, formal, negatif, lampau, て形, sedang berlangsung, keinginan, kemungkinan, pasif, kausatif, dan pola kalimat.</p></div></div>
+  <div class="dictionary-search"><input id="dictSearch" placeholder="Cari: 食べる / taberu / makan..."><select id="dictLevel"><option>ALL</option><option>N5</option><option>N4</option></select><select id="dictCategory"><option>Semua kategori</option><option>Kata Kerja</option><option>Kata Benda</option><option>Kata Sifat</option></select></div>
+  <div id="dictResults" class="dict-grid"></div>
+  <div id="dictDetail" class="panel dict-detail hidden"></div>
+</section>
+
 <section id="test" class="page">
-  <div class="section-head"><div><span class="eyebrow">EXAM CENTER</span><h2>📝 Test JLPT & TKA</h2><p>Timer, navigasi, nilai, dan pembahasan jawaban.</p></div></div>
-  <div class="test-tabs v8-test-tabs">
-    <button type="button" class="active" data-test="JLPT-N5">🇯🇵 JLPT N5</button>
-    <button type="button" data-test="JLPT-N4">🇯🇵 JLPT N4</button>
-    <button type="button" data-test="TKA">🇮🇩 TKA Jepang</button>
+  <div class="exam-shell">
+    <div class="section-head exam-heading"><div><span class="eyebrow">EXAM CENTER · 90 MENIT</span><h2>📝 Tes JLPT & TKA</h2><p>Pilih Test 1, Test 2, dan seterusnya. Setiap test terdiri dari Kosakata, Tata bahasa, Membaca, dan Mendengarkan.</p></div></div>
+    <div class="test-level-tabs"><button class="active" data-level="N5">JLPT N5 <small>20 Test</small></button><button data-level="N4">JLPT N4 <small>20 Test</small></button><button data-level="TKA">TKA Jepang <small>10 Test</small></button></div>
+    <div id="testCatalog" class="test-catalog"></div>
+    <div id="testDetail" class="panel test-detail hidden"></div>
+    <div id="testRunning" class="hidden">
+      <div class="test-sticky-bar"><div><b id="runningTestLabel">JLPT N5 · Test 1</b><span id="runningProgressText">0 / 40</span></div><div class="timer-pill">⏱️ <span id="testTimer">90:00</span></div><button type="button" id="submitTest" class="btn danger">Selesai & Nilai</button></div>
+      <div class="test-progress-track"><span id="testProgress"></span></div><div id="testArea" class="test-area"></div>
+    </div>
+    <div id="testResult" class="panel test-result hidden"></div>
   </div>
-  <div id="testSetup" class="test-setup-grid">
-    <div class="panel exam-hero"><span class="eyebrow">SIAP BELAJAR?</span><h2 id="testTitle">JLPT N5</h2><p id="testDescription"></p><div class="exam-meta"><span>📄 <b id="testCount">0</b> soal</span><span>⏱️ 20 menit</span><span>🎯 Pembahasan</span></div><button type="button" id="startTest" class="btn primary big-btn">▶ Mulai Test</button></div>
-    <div class="panel exam-rules"><h3>Aturan</h3><ul><li>Pilih jawaban pada setiap soal.</li><li>PGK memakai Benar/Salah.</li><li>Timer otomatis mengakhiri test.</li><li>Pembahasan muncul setelah selesai.</li></ul></div>
-  </div>
-  <div id="testRunning" class="hidden">
-    <div class="test-sticky-bar"><div><b id="runningTestLabel">JLPT N5</b><span id="runningProgressText">0 / 0</span></div><div class="timer-pill">⏱️ <span id="testTimer">20:00</span></div><button type="button" id="submitTest" class="btn danger">Selesai & Nilai</button></div>
-    <div class="test-progress-track"><span id="testProgress"></span></div><div id="testArea" class="test-area"></div>
-  </div>
-  <div id="testResult" class="panel test-result hidden"></div>
 </section>
 
 
