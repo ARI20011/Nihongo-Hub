@@ -723,6 +723,53 @@ const MATERIALS={
   {l:'ALL',t:'鉄道 · Railway',d:'Bahasa kerja perkeretaapian.',body:'Fokus: stasiun, jadwal, keselamatan, penumpang, peralatan, dan prosedur.'}
  ]}
 };
+const CULTURE={
+ daily:[
+  ['あいさつ','Salam & sapaan','Sapaan berubah mengikuti waktu dan situasi. こんにちは umum dipakai pada siang hari; おはようございます untuk pagi dalam situasi sopan.','Dalam percakapan sehari-hari, konteks dan hubungan dengan lawan bicara penting. Bentuk sopan membantu menjaga jarak yang sesuai.'],
+  ['家族','Keluarga','Cara menyebut anggota keluarga sendiri dan keluarga orang lain dapat berbeda.','Saat berbicara tentang keluarga sendiri, bentuk seperti 母（はは）dan 父（ちち）sering digunakan; untuk keluarga orang lain, お母さん dan お父さん umum dipakai.'],
+  ['生活','Kehidupan sehari-hari','Rutinitas Jepang banyak berkaitan dengan jadwal, ketepatan waktu, kebersihan, dan aturan bersama.','Kosakata seperti 時間, 約束, 電車, ごみ sering muncul saat belajar bahasa maupun memahami kehidupan sehari-hari.'],
+  ['コンビニ','Konbini','Convenience store menyediakan makanan, minuman, pembayaran tertentu, pengiriman, dan kebutuhan harian.','Banyak dialog N5/N4 mengambil konteks toko: memilih barang, membayar, meminta kantong, dan menanyakan lokasi produk.']
+ ],
+ etiquette:[
+  ['お辞儀','Membungkuk','Ojigi digunakan untuk salam, terima kasih, meminta maaf, atau menunjukkan hormat.','Kedalaman dan lamanya membungkuk bergantung pada situasi. Untuk pelajar, pahami fungsi sosialnya terlebih dahulu.'],
+  ['敬語','Keigo','Keigo adalah bahasa hormat yang digunakan sesuai hubungan dan situasi.','Di level N4, kamu mulai bertemu ungkapan sopan yang lebih beragam. Perhatikan siapa berbicara kepada siapa sebelum memilih ungkapan.'],
+  ['靴を脱ぐ','Melepas sepatu','Di rumah dan beberapa tempat tertentu, sepatu luar dilepas sebelum masuk.','Kosakata 玄関, 靴, 上がる sering berkaitan dengan situasi ini.'],
+  ['ごみ分別','Pemilahan sampah','Banyak daerah memiliki aturan pemilahan dan jadwal pembuangan sampah.','Aturannya dapat berbeda menurut pemerintah daerah, jadi jangan menganggap satu sistem berlaku di seluruh Jepang.']
+ ],
+ school:[
+  ['学校生活','Kehidupan sekolah','Sekolah Jepang memiliki kosakata khas seperti 教室, 先生, 授業, 宿題, 部活.','Kegiatan klub (部活動) menjadi konteks yang sering muncul dalam materi bahasa Jepang.'],
+  ['給食','Makan siang sekolah','Kyūshoku adalah makan siang sekolah yang terorganisasi di banyak sekolah.','Kosakata makanan, giliran tugas, dan kebiasaan makan dapat muncul dalam bacaan sederhana.'],
+  ['部活動','Klub sekolah','Siswa dapat mengikuti klub olahraga, seni, budaya, dan aktivitas lain.','Ungkapan seperti 部活をします dan 放課後 sering berguna untuk memahami dialog sekolah.']
+ ],
+ food:[
+  ['和食','Washoku','Washoku merujuk pada tradisi kuliner Jepang; nasi, sup, lauk, dan bahan musiman adalah unsur penting dalam banyak hidangan.','Jangan menyamakan semua makanan Jepang dengan sushi. Ada banyak masakan rumahan dan regional.'],
+  ['いただきます','Itadakimasu','Ungkapan sebelum makan yang berkaitan dengan rasa syukur dan penghargaan terhadap makanan.','Biasanya diucapkan sebelum mulai makan, bukan sekadar terjemahan literal “selamat makan”.'],
+  ['ごちそうさまでした','Gochisousama deshita','Ungkapan setelah makan untuk menunjukkan apresiasi atas hidangan.','Sering dipakai setelah selesai makan di rumah, restoran, atau tempat lain.'],
+  ['弁当','Bento','Bekal dalam kotak yang berisi nasi dan lauk.','Kosakata bento berguna untuk topik sekolah, perjalanan, dan kehidupan sehari-hari.']
+ ],
+ season:[
+  ['春','Musim semi','Musim semi terkenal dengan sakura dan suasana awal tahun sekolah/kerja.','Kosakata 桜, 花見, 新学期 sering muncul dalam konteks budaya dan bacaan.'],
+  ['夏','Musim panas','Musim panas identik dengan cuaca panas, festival musim panas, kembang api, dan kegiatan luar ruangan.','Kosakata 夏祭り, 花火, 暑い sangat berguna.'],
+  ['秋','Musim gugur','Musim gugur berkaitan dengan perubahan warna daun dan cuaca yang lebih sejuk.','紅葉（こうよう）adalah kosakata penting untuk memahami topik musim.'],
+  ['冬','Musim dingin','Musim dingin membawa suhu rendah dan salju di banyak wilayah, tetapi kondisi berbeda menurut daerah.','Kosakata 雪, 寒い, お正月 sering muncul pada materi pemula.']
+ ],
+ travel:[
+  ['電車','Kereta','Kereta dan jaringan transportasi umum sangat penting di banyak kota Jepang.','Perhatikan kosakata 駅, 切符, 改札, 乗る, 降りる.'],
+  ['時間','Ketepatan waktu','Jadwal dan waktu sangat penting dalam banyak konteks sekolah, kerja, dan transportasi.','Untuk soal listening, angka dan waktu sering menjadi informasi kunci.'],
+  ['新幹線','Shinkansen','Kereta cepat yang menghubungkan berbagai wilayah Jepang.','Kosakata perjalanan seperti 予約, 指定席, 自由席 dapat ditemui pada level yang lebih tinggi.'],
+  ['駅のマナー','Etika di stasiun','Ada kebiasaan antre, memberi ruang bagi penumpang turun, dan menjaga suara di transportasi umum.','Kebiasaan dapat berbeda menurut tempat; materi ini membantu memahami konteks, bukan aturan mutlak untuk setiap situasi.']
+ ]
+};
+function renderCulture(){
+ const tab=document.querySelector('#cultureTabs .active')?.dataset.culture||'daily';
+ const q=($('#cultureSearch')?.value||'').toLowerCase().trim();
+ const items=(CULTURE[tab]||[]).filter(x=>!q||x.join(' ').toLowerCase().includes(q));
+ $('#cultureGrid').innerHTML=items.map((x,i)=>`<article class="culture-card" data-ci="${i}"><span class="culture-icon jp">${esc(x[0].slice(0,1))}</span><div><h3>${esc(x[0])}</h3><b>${esc(x[1])}</b><p>${esc(x[2])}</p></div><span class="culture-arrow">→</span></article>`).join('')||'<div class="panel empty-state">Topik tidak ditemukan.</div>';
+ $$('#cultureGrid .culture-card').forEach((el,i)=>el.onclick=()=>{const x=items[i];$('#cultureDetail').classList.remove('hidden');$('#cultureDetail').innerHTML=`<span class="eyebrow">BUDAYA JEPANG</span><h2 class="jp">${esc(x[0])}</h2><h3>${esc(x[1])}</h3><p>${esc(x[2])}</p><div class="culture-note"><b>Catatan konteks</b><p>${esc(x[3])}</p></div>`;$('#cultureDetail').scrollIntoView({behavior:'smooth',block:'start'})});
+}
+$$('#cultureTabs button').forEach(b=>b.addEventListener('click',()=>{$$('#cultureTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderCulture()}));
+$('#cultureSearch')?.addEventListener('input',renderCulture);renderCulture();
+
 function renderMaterials(){
  const tab=document.querySelector('#materialTabs .active')?.dataset.mtab||'huruf', level=document.querySelector('.material-levels .active')?.dataset.mlevel||'ALL', q=($('#materialSearch')?.value||'').toLowerCase().trim(), data=MATERIALS[tab]||MATERIALS.huruf;
  const items=data.items.filter(x=>(level==='ALL'||x.l==='ALL'||x.l===level)&&(!q||[x.t,x.d,x.body,x.l].join(' ').toLowerCase().includes(q)));
@@ -773,3 +820,14 @@ record=function(mode,correct,card){
   save();renderSRS();renderDashboard();renderAchievements();
 };
 renderSRS();renderDashboard();renderAchievements();
+
+function renderHomeStats(){
+ const learned=Object.keys(state.learned||{}).length;
+ const acc=state.attempts?Math.round((state.correct||0)/state.attempts*100):0;
+ if($('#homeLearned'))$('#homeLearned').textContent=learned;
+ if($('#homeAccuracy'))$('#homeAccuracy').textContent=acc+'%';
+ if($('#homeStreak'))$('#homeStreak').textContent=state.streak||0;
+}
+const _renderStats=renderStats;
+renderStats=function(){_renderStats();renderHomeStats()};
+renderHomeStats();
