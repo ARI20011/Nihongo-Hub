@@ -728,36 +728,56 @@ const CULTURE={
   ['あいさつ','Salam & sapaan','Sapaan berubah mengikuti waktu dan situasi. こんにちは umum dipakai pada siang hari; おはようございます untuk pagi dalam situasi sopan.','Dalam percakapan sehari-hari, konteks dan hubungan dengan lawan bicara penting. Bentuk sopan membantu menjaga jarak yang sesuai.'],
   ['家族','Keluarga','Cara menyebut anggota keluarga sendiri dan keluarga orang lain dapat berbeda.','Saat berbicara tentang keluarga sendiri, bentuk seperti 母（はは）dan 父（ちち）sering digunakan; untuk keluarga orang lain, お母さん dan お父さん umum dipakai.'],
   ['生活','Kehidupan sehari-hari','Rutinitas Jepang banyak berkaitan dengan jadwal, ketepatan waktu, kebersihan, dan aturan bersama.','Kosakata seperti 時間, 約束, 電車, ごみ sering muncul saat belajar bahasa maupun memahami kehidupan sehari-hari.'],
-  ['コンビニ','Konbini','Convenience store menyediakan makanan, minuman, pembayaran tertentu, pengiriman, dan kebutuhan harian.','Banyak dialog N5/N4 mengambil konteks toko: memilih barang, membayar, meminta kantong, dan menanyakan lokasi produk.']
+  ['コンビニ','Konbini','Convenience store menyediakan makanan, minuman, pembayaran tertentu, pengiriman, dan kebutuhan harian.','Banyak dialog N5/N4 mengambil konteks toko: memilih barang, membayar, meminta kantong, dan menanyakan lokasi produk.'],
+  ['おもてなし','Omotenashi','Konsep pelayanan yang menekankan perhatian terhadap kebutuhan tamu dan pengalaman yang baik.','Istilah ini sering dipakai saat membahas budaya pelayanan Jepang; penerapannya berbeda menurut tempat dan layanan.'],
+  ['空気を読む','Kuuki o yomu','Secara harfiah “membaca suasana”; memahami konteks sosial sebelum bertindak atau berbicara.','Berguna untuk memahami dialog yang maknanya tidak selalu dinyatakan secara langsung.'],
+  ['もったいない','Mottainai','Ungkapan ketika sesuatu dianggap sayang terbuang atau tidak dimanfaatkan.','Sering muncul dalam pembahasan hemat, penggunaan kembali, dan kepedulian terhadap sumber daya.']
  ],
  etiquette:[
   ['お辞儀','Membungkuk','Ojigi digunakan untuk salam, terima kasih, meminta maaf, atau menunjukkan hormat.','Kedalaman dan lamanya membungkuk bergantung pada situasi. Untuk pelajar, pahami fungsi sosialnya terlebih dahulu.'],
   ['敬語','Keigo','Keigo adalah bahasa hormat yang digunakan sesuai hubungan dan situasi.','Di level N4, kamu mulai bertemu ungkapan sopan yang lebih beragam. Perhatikan siapa berbicara kepada siapa sebelum memilih ungkapan.'],
   ['靴を脱ぐ','Melepas sepatu','Di rumah dan beberapa tempat tertentu, sepatu luar dilepas sebelum masuk.','Kosakata 玄関, 靴, 上がる sering berkaitan dengan situasi ini.'],
-  ['ごみ分別','Pemilahan sampah','Banyak daerah memiliki aturan pemilahan dan jadwal pembuangan sampah.','Aturannya dapat berbeda menurut pemerintah daerah, jadi jangan menganggap satu sistem berlaku di seluruh Jepang.']
+  ['ごみ分別','Pemilahan sampah','Banyak daerah memiliki aturan pemilahan dan jadwal pembuangan sampah.','Aturannya dapat berbeda menurut pemerintah daerah, jadi jangan menganggap satu sistem berlaku di seluruh Jepang.'],
+  ['いただきます・ごちそうさま','Itadakimasu & Gochisousama','Dua ungkapan yang biasa dikaitkan dengan waktu makan: sebelum dan setelah makan.','Pelajari sebagai kebiasaan bahasa dan sosial; konteks keluarga, sekolah, dan restoran dapat berbeda.'],
+  ['列に並ぶ','Retšu ni narabu','Mengantri sesuai urutan untuk layanan, transportasi, atau tempat tertentu.','Perhatikan tanda antre dan posisi orang di depan saat menggunakan fasilitas umum.']
  ],
  school:[
   ['学校生活','Kehidupan sekolah','Sekolah Jepang memiliki kosakata khas seperti 教室, 先生, 授業, 宿題, 部活.','Kegiatan klub (部活動) menjadi konteks yang sering muncul dalam materi bahasa Jepang.'],
   ['給食','Makan siang sekolah','Kyūshoku adalah makan siang sekolah yang terorganisasi di banyak sekolah.','Kosakata makanan, giliran tugas, dan kebiasaan makan dapat muncul dalam bacaan sederhana.'],
-  ['部活動','Klub sekolah','Siswa dapat mengikuti klub olahraga, seni, budaya, dan aktivitas lain.','Ungkapan seperti 部活をします dan 放課後 sering berguna untuk memahami dialog sekolah.']
+  ['部活動','Klub sekolah','Siswa dapat mengikuti klub olahraga, seni, budaya, dan aktivitas lain.','Ungkapan seperti 部活をします dan 放課後 sering berguna untuk memahami dialog sekolah.'],
+  ['入学式','Nyūgakushiki','Upacara masuk sekolah yang menandai dimulainya jenjang pendidikan.','Sering dibahas bersama 新学期 dan 桜 dalam materi budaya musim semi.'],
+  ['卒業式','Sotsugyōshiki','Upacara kelulusan sekolah.','Kosakata terkait: 卒業, 卒業生, 式, 先生.']
  ],
  food:[
   ['和食','Washoku','Washoku merujuk pada tradisi kuliner Jepang; nasi, sup, lauk, dan bahan musiman adalah unsur penting dalam banyak hidangan.','Jangan menyamakan semua makanan Jepang dengan sushi. Ada banyak masakan rumahan dan regional.'],
   ['いただきます','Itadakimasu','Ungkapan sebelum makan yang berkaitan dengan rasa syukur dan penghargaan terhadap makanan.','Biasanya diucapkan sebelum mulai makan, bukan sekadar terjemahan literal “selamat makan”.'],
   ['ごちそうさまでした','Gochisousama deshita','Ungkapan setelah makan untuk menunjukkan apresiasi atas hidangan.','Sering dipakai setelah selesai makan di rumah, restoran, atau tempat lain.'],
-  ['弁当','Bento','Bekal dalam kotak yang berisi nasi dan lauk.','Kosakata bento berguna untuk topik sekolah, perjalanan, dan kehidupan sehari-hari.']
+  ['弁当','Bento','Bekal dalam kotak yang berisi nasi dan lauk.','Kosakata bento berguna untuk topik sekolah, perjalanan, dan kehidupan sehari-hari.'],
+  ['おにぎり','Onigiri','Nasi kepal yang biasanya dibentuk segitiga atau bulat dan dapat berisi berbagai bahan.','Contoh kosakata makanan sederhana yang sering muncul dalam materi pemula.'],
+  ['ラーメン','Rāmen','Hidangan mi berkuah dengan banyak variasi daerah dan gaya.','Nama menu dan topping dapat menjadi konteks latihan membaca di restoran.']
  ],
  season:[
   ['春','Musim semi','Musim semi terkenal dengan sakura dan suasana awal tahun sekolah/kerja.','Kosakata 桜, 花見, 新学期 sering muncul dalam konteks budaya dan bacaan.'],
   ['夏','Musim panas','Musim panas identik dengan cuaca panas, festival musim panas, kembang api, dan kegiatan luar ruangan.','Kosakata 夏祭り, 花火, 暑い sangat berguna.'],
   ['秋','Musim gugur','Musim gugur berkaitan dengan perubahan warna daun dan cuaca yang lebih sejuk.','紅葉（こうよう）adalah kosakata penting untuk memahami topik musim.'],
-  ['冬','Musim dingin','Musim dingin membawa suhu rendah dan salju di banyak wilayah, tetapi kondisi berbeda menurut daerah.','Kosakata 雪, 寒い, お正月 sering muncul pada materi pemula.']
+  ['冬','Musim dingin','Musim dingin membawa suhu rendah dan salju di banyak wilayah, tetapi kondisi berbeda menurut daerah.','Kosakata 雪, 寒い, お正月 sering muncul pada materi pemula.'],
+  ['花見','Hanami','Kebiasaan menikmati pemandangan bunga, terutama sakura, pada musim semi.','Kosakata: 桜（さくら）= sakura, 花（はな）= bunga, 見る（みる）= melihat.'],
+  ['紅葉狩り','Momijigari','Kegiatan menikmati daun musim gugur yang berubah warna.','紅葉（こうよう）berarti dedaunan musim gugur; 狩り dalam istilah ini bermakna kegiatan menikmati/mencari pemandangan.'],
+  ['お正月','Oshōgatsu','Periode perayaan Tahun Baru Jepang.','Kosakata terkait: 初詣, お年玉, 年賀状, 門松.'],
+  ['初詣','Hatsumōde','Kunjungan pertama ke kuil atau tempat ibadah pada awal tahun.','Biasanya dikaitkan dengan periode Tahun Baru; praktik dan pengalaman tiap orang dapat berbeda.'],
+  ['節分','Setsubun','Tradisi musiman yang berlangsung sekitar pergantian musim, terkenal dengan kegiatan melempar kacang dalam sebagian keluarga.','Ungkapan 豆まき（まめまき）= kegiatan melempar kacang.'],
+  ['七夕','Tanabata','Tradisi musim panas yang berkaitan dengan legenda Orihime dan Hikoboshi serta menulis harapan pada tanzaku.','Kosakata: 短冊（たんざく）, 願い（ねがい）, 笹（ささ）.'],
+  ['お盆','Obon','Periode tradisi untuk mengenang leluhur; waktu dan praktik dapat berbeda menurut wilayah.','Sering dikaitkan dengan pulang kampung, keluarga, dan kegiatan komunitas.'],
+  ['夏祭り','Natsu matsuri','Festival musim panas yang dapat menampilkan makanan, permainan, musik, dan pertunjukan.','Kosakata: 屋台（やたい）, 浴衣（ゆかた）, 花火（はなび）.'],
+  ['ひな祭り','Hina matsuri','Perayaan yang berlangsung pada 3 Maret dan dikenal dengan boneka hina dalam tradisi tertentu.','Kosakata: 雛人形（ひなにんぎょう）.']
  ],
  travel:[
   ['電車','Kereta','Kereta dan jaringan transportasi umum sangat penting di banyak kota Jepang.','Perhatikan kosakata 駅, 切符, 改札, 乗る, 降りる.'],
   ['時間','Ketepatan waktu','Jadwal dan waktu sangat penting dalam banyak konteks sekolah, kerja, dan transportasi.','Untuk soal listening, angka dan waktu sering menjadi informasi kunci.'],
   ['新幹線','Shinkansen','Kereta cepat yang menghubungkan berbagai wilayah Jepang.','Kosakata perjalanan seperti 予約, 指定席, 自由席 dapat ditemui pada level yang lebih tinggi.'],
-  ['駅のマナー','Etika di stasiun','Ada kebiasaan antre, memberi ruang bagi penumpang turun, dan menjaga suara di transportasi umum.','Kebiasaan dapat berbeda menurut tempat; materi ini membantu memahami konteks, bukan aturan mutlak untuk setiap situasi.']
+  ['駅のマナー','Etika di stasiun','Ada kebiasaan antre, memberi ruang bagi penumpang turun, dan menjaga suara di transportasi umum.','Kebiasaan dapat berbeda menurut tempat; materi ini membantu memahami konteks, bukan aturan mutlak untuk setiap situasi.'],
+  ['乗り換え','Norikae','Berpindah dari satu kereta atau jalur transportasi ke yang lain.','Kosakata penting saat membaca papan stasiun dan petunjuk perjalanan.'],
+  ['交通系ICカード','Kōtsū-kei IC kādo','Kartu IC yang dapat digunakan untuk pembayaran transportasi dan layanan tertentu.','Contoh istilah: ICカード, 改札, チャージ.']
  ]
 };
 function renderCulture(){
@@ -774,7 +794,7 @@ function renderMaterials(){
  const tab=document.querySelector('#materialTabs .active')?.dataset.mtab||'huruf', level=document.querySelector('.material-levels .active')?.dataset.mlevel||'ALL', q=($('#materialSearch')?.value||'').toLowerCase().trim(), data=MATERIALS[tab]||MATERIALS.huruf;
  const items=data.items.filter(x=>(level==='ALL'||x.l==='ALL'||x.l===level)&&(!q||[x.t,x.d,x.body,x.l].join(' ').toLowerCase().includes(q)));
  $('#materialContent').innerHTML=`<div class="material-intro panel"><span class="eyebrow">${esc(data.title)}</span><h2>${esc(data.title)}</h2><p>${esc(data.intro)}</p></div><div class="material-grid">${items.map((x,i)=>`<article class="material-card" data-mi="${i}"><span class="material-level">${esc(x.l)}</span><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p><button class="btn">Pelajari →</button></article>`).join('')}</div>${items.length?'':'<div class="panel empty-state">Materi tidak ditemukan. Coba hapus kata pencarian atau pilih Semua.</div>'}`;
- $$('#materialContent .material-card').forEach((el,i)=>el.onclick=()=>{const x=items[i];$('#materialDetail').classList.remove('hidden');$('#materialDetail').innerHTML=`<div class="material-detail-head"><span class="material-level">${esc(x.l)}</span><h2>${esc(x.t)}</h2><p>${esc(x.d)}</p></div><div class="material-body"><h3>📘 Penjelasan</h3><p>${esc(x.body)}</p><div class="material-study-tip"><b>💡 Cara belajar:</b> baca contoh, ucapkan keras-keras, lalu buat satu kalimat sendiri menggunakan pola tersebut.</div></div>`;$('#materialDetail').scrollIntoView({behavior:'smooth',block:'start'})});
+ $$('#materialContent .material-card').forEach((el,i)=>el.onclick=()=>{const x=items[i];$('#materialDetail').classList.remove('hidden');$('#materialDetail').innerHTML=`<div class="material-detail-head"><span class="material-level">${esc(x.l)}</span><h2>${esc(x.t)}</h2><p>${esc(x.d)}</p></div><div class="material-body"><h3>📘 Penjelasan</h3><p>${esc(x.body)}</p>${x.t.includes('Katakana')?'<div class="material-study-tip"><b>🎧 Latihan Katakana:</b> lihat kartu, dengarkan bunyinya, lalu uji ingatan dengan pilihan romaji.</div><button class="btn primary" id="openKanaTrainer">Buka Katakana Studio →</button>':'<div class="material-study-tip"><b>💡 Cara belajar:</b> baca contoh, ucapkan keras-keras, lalu buat satu kalimat sendiri menggunakan pola tersebut.</div>'}</div>`;$('#openKanaTrainer')?.addEventListener('click',()=>{location.hash='kana';renderKana()});$('#materialDetail').scrollIntoView({behavior:'smooth',block:'start'})});
 }
 $$('#materialTabs button').forEach(b=>b.addEventListener('click',()=>{$$('#materialTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderMaterials()}));
 $$('.material-levels button').forEach(b=>b.addEventListener('click',()=>{$$('.material-levels button').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderMaterials()}));
@@ -831,3 +851,27 @@ function renderHomeStats(){
 const _renderStats=renderStats;
 renderStats=function(){_renderStats();renderHomeStats()};
 renderHomeStats();
+
+
+/* ===== v8.9 Kana Studio ===== */
+const KANA={
+ hiragana:[['あ','a'],['い','i'],['う','u'],['え','e'],['お','o'],['か','ka'],['き','ki'],['く','ku'],['け','ke'],['こ','ko'],['さ','sa'],['し','shi'],['す','su'],['せ','se'],['そ','so'],['た','ta'],['ち','chi'],['つ','tsu'],['て','te'],['と','to'],['な','na'],['に','ni'],['ぬ','nu'],['ね','ne'],['の','no'],['は','ha'],['ひ','hi'],['ふ','fu / hu'],['へ','he'],['ほ','ho'],['ま','ma'],['み','mi'],['む','mu'],['め','me'],['も','mo'],['や','ya'],['ゆ','yu'],['よ','yo'],['ら','ra'],['り','ri'],['る','ru'],['れ','re'],['ろ','ro'],['わ','wa'],['を','wo'],['ん','n'],['が','ga'],['ぎ','gi'],['ぐ','gu'],['げ','ge'],['ご','go'],['ざ','za'],['じ','ji'],['ず','zu'],['ぜ','ze'],['ぞ','zo'],['だ','da'],['ぢ','ji'],['づ','zu'],['で','de'],['ど','do'],['ば','ba'],['び','bi'],['ぶ','bu'],['べ','be'],['ぼ','bo'],['ぱ','pa'],['ぴ','pi'],['ぷ','pu'],['ぺ','pe'],['ぽ','po']],
+ katakana:[['ア','a'],['イ','i'],['ウ','u'],['エ','e'],['オ','o'],['カ','ka'],['キ','ki'],['ク','ku'],['ケ','ke'],['コ','ko'],['サ','sa'],['シ','shi'],['ス','su'],['セ','se'],['ソ','so'],['タ','ta'],['チ','chi'],['ツ','tsu'],['テ','te'],['ト','to'],['ナ','na'],['ニ','ni'],['ヌ','nu'],['ネ','ne'],['ノ','no'],['ハ','ha'],['ヒ','hi'],['フ','fu / hu'],['ヘ','he'],['ホ','ho'],['マ','ma'],['ミ','mi'],['ム','mu'],['メ','me'],['モ','mo'],['ヤ','ya'],['ユ','yu'],['ヨ','yo'],['ラ','ra'],['リ','ri'],['ル','ru'],['レ','re'],['ロ','ro'],['ワ','wa'],['ヲ','wo'],['ン','n'],['ガ','ga'],['ギ','gi'],['グ','gu'],['ゲ','ge'],['ゴ','go'],['ザ','za'],['ジ','ji'],['ズ','zu'],['ゼ','ze'],['ゾ','zo'],['ダ','da'],['ヂ','ji'],['ヅ','zu'],['デ','de'],['ド','do'],['バ','ba'],['ビ','bi'],['ブ','bu'],['ベ','be'],['ボ','bo'],['パ','pa'],['ピ','pi'],['プ','pu'],['ペ','pe'],['ポ','po']]
+};
+let kanaKind='hiragana',kanaMode='cards',kanaIndex=0;
+function speakKana(ch){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(ch);u.lang='ja-JP';u.rate=.72;speechSynthesis.speak(u)}}
+function kanaList(){return KANA[kanaKind]}
+function kanaOptions(correct){const arr=kanaList().map(x=>x[1]);const set=new Set([correct]);while(set.size<4)set.add(arr[Math.floor(Math.random()*arr.length)]);return [...set].sort(()=>Math.random()-.5)}
+function renderKana(){
+ const list=kanaList();
+ $('#kanaCards').classList.toggle('hidden',kanaMode!=='cards');$('#kanaPractice').classList.toggle('hidden',kanaMode!=='practice');
+ if(kanaMode==='cards'){$('#kanaCards').innerHTML=list.map((x,i)=>`<article class="kana-card" data-kidx="${i}"><span class="kana-sound">🔊</span><div class="kana-char jp">${x[0]}</div><div class="kana-romaji">${x[1]}</div><small>${kanaKind==='katakana'?'カタカナ':'ひらがな'}</small></article>`).join('');$$('#kanaCards .kana-card').forEach(el=>el.onclick=()=>speakKana(list[+el.dataset.kidx][0]));return}
+ const x=list[kanaIndex%list.length],opts=kanaOptions(x[1]);
+ $('#kanaPractice').innerHTML=`<span class="eyebrow">FLASHCARD · ${kanaKind==='katakana'?'KATAKANA':'HIRAGANA'}</span><div class="practice-char jp">${x[0]}</div><p class="practice-prompt">Huruf apakah ini? Pilih romaji yang sesuai.</p><button class="btn" id="kanaHear">🔊 Dengarkan</button><div class="kana-options">${opts.map(o=>`<button data-romaji="${o}">${o}</button>`).join('')}</div><div id="kanaFeedback" class="kana-feedback"></div><button class="btn primary kana-next" id="kanaNext">Huruf berikutnya →</button>`;
+ $('#kanaHear').onclick=()=>speakKana(x[0]);
+ $$('#kanaPractice .kana-options button').forEach(b=>b.onclick=()=>{const ok=b.dataset.romaji===x[1];$$('#kanaPractice .kana-options button').forEach(z=>z.disabled=true);b.classList.add(ok?'correct':'wrong');if(!ok)$$('#kanaPractice .kana-options button').find(z=>z.dataset.romaji===x[1])?.classList.add('correct');$('#kanaFeedback').textContent=ok?'✓ Benar!':'✕ Belum tepat — jawaban: '+x[1];setModeStat('type')});
+ $('#kanaNext').onclick=()=>{kanaIndex=(kanaIndex+1)%list.length;renderKana()};
+}
+$$('#kanaTabs button').forEach(b=>b.onclick=()=>{$$('#kanaTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');kanaKind=b.dataset.kana;kanaIndex=0;renderKana()});
+$$('#kanaModeTabs button').forEach(b=>b.onclick=()=>{$$('#kanaModeTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');kanaMode=b.dataset.kmode;kanaIndex=0;renderKana()});
+renderKana();
